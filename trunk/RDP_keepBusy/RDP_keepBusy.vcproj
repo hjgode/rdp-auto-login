@@ -5,6 +5,10 @@
 	Name="RDP_keepBusy"
 	ProjectGUID="{3A152083-BDFC-402B-A8AC-DBEF9819D05A}"
 	RootNamespace="RDP_keepBusy"
+	SccProjectName="Svn"
+	SccAuxPath="Svn"
+	SccLocalPath="Svn"
+	SccProvider="SubversionScc"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
