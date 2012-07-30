@@ -8,6 +8,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDP_Autologin_Settings", "RDP_Autologin_Settings\RDP_Autologin_Settings.csproj", "{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}"
 EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Settings|Any CPU = Debug Settings|Any CPU
 		Debug Settings|Mixed Platforms = Debug Settings|Mixed Platforms
