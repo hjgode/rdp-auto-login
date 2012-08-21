@@ -1,0 +1,21 @@
+#labels Featured
+#RDP AutoLogin automates the login in Windows Mobile Remote Desktop.
+
+= RDP_AutoLogin =
+
+Automatically starts Windows Mobile Remote Desktop app (RDM) and fills all fields and connects. (C/C++)
+
+= RDP_Autologin_Settings =
+
+Enables you to define login data and options for RDP_AutoLogin. (C#)
+
+= RDM_KeepBusy =
+
+Normally RDM disconnects automatically after 10 minutes idle time regardless of your server's session settings. RDP_KeepBusy simulates user interaction and so the session is kept open all the time until you manually disconnect. (C/C++)
+
+= StopKeepBusy =
+
+RDM_KeepBusy will run all the time once started. To stop the tool you must use StopKeepBusy. (C/C++)
+
+----
+details at hjgode.de/wp
