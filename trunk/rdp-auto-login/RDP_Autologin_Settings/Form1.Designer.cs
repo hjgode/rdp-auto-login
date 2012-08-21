@@ -29,11 +29,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.Label label;
+            System.Windows.Forms.Label label14;
+            System.Windows.Forms.Label label15;
+            System.Windows.Forms.Label label16;
+            System.Windows.Forms.Label label17;
+            System.Windows.Forms.Label label18;
+            System.Windows.Forms.Label label19;
             this.mainMenu1 = new System.Windows.Forms.MainMenu();
             this.mnuExit = new System.Windows.Forms.MenuItem();
             this.mnuSave = new System.Windows.Forms.MenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabConnection = new System.Windows.Forms.TabPage();
             this.chkSavePassword = new System.Windows.Forms.CheckBox();
             this.txtDomain = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -43,12 +50,22 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtComputer = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabScreen = new System.Windows.Forms.TabPage();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.cboColors = new System.Windows.Forms.ComboBox();
             this.chkFitRemoteDesktop = new System.Windows.Forms.CheckBox();
             this.chkFullScreen = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tab_resources = new System.Windows.Forms.TabPage();
+            this.cbo_RemoteDesktopSound = new System.Windows.Forms.ComboBox();
+            this.cbo_DeviceStorage = new System.Windows.Forms.ComboBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.tabExtras = new System.Windows.Forms.TabPage();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.cboEmulationMode = new System.Windows.Forms.ComboBox();
             this.txtArguments = new System.Windows.Forms.TextBox();
@@ -56,21 +73,27 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.tab_resources = new System.Windows.Forms.TabPage();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.cbo_DeviceStorage = new System.Windows.Forms.ComboBox();
-            this.cbo_RemoteDesktopSound = new System.Windows.Forms.ComboBox();
+            this.tabKeepBusy = new System.Windows.Forms.TabPage();
+            this.numericX = new System.Windows.Forms.NumericUpDown();
+            this.numericY = new System.Windows.Forms.NumericUpDown();
+            this.numericLen = new System.Windows.Forms.NumericUpDown();
+            this.numericWidth = new System.Windows.Forms.NumericUpDown();
+            this.numericInterval = new System.Windows.Forms.NumericUpDown();
+            this.chkMouse = new System.Windows.Forms.CheckBox();
+            this.chkKey = new System.Windows.Forms.CheckBox();
+            label = new System.Windows.Forms.Label();
+            label14 = new System.Windows.Forms.Label();
+            label15 = new System.Windows.Forms.Label();
+            label16 = new System.Windows.Forms.Label();
+            label17 = new System.Windows.Forms.Label();
+            label18 = new System.Windows.Forms.Label();
+            label19 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            this.tabPage3.SuspendLayout();
+            this.tabConnection.SuspendLayout();
+            this.tabScreen.SuspendLayout();
             this.tab_resources.SuspendLayout();
+            this.tabExtras.SuspendLayout();
+            this.tabKeepBusy.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -90,10 +113,11 @@
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabConnection);
+            this.tabControl1.Controls.Add(this.tabScreen);
             this.tabControl1.Controls.Add(this.tab_resources);
-            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabExtras);
+            this.tabControl1.Controls.Add(this.tabKeepBusy);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -101,22 +125,22 @@
             this.tabControl1.Size = new System.Drawing.Size(240, 268);
             this.tabControl1.TabIndex = 13;
             // 
-            // tabPage1
+            // tabConnection
             // 
-            this.tabPage1.BackColor = System.Drawing.Color.Tan;
-            this.tabPage1.Controls.Add(this.chkSavePassword);
-            this.tabPage1.Controls.Add(this.txtDomain);
-            this.tabPage1.Controls.Add(this.label4);
-            this.tabPage1.Controls.Add(this.txtPassword);
-            this.tabPage1.Controls.Add(this.label3);
-            this.tabPage1.Controls.Add(this.txtUserName);
-            this.tabPage1.Controls.Add(this.label2);
-            this.tabPage1.Controls.Add(this.txtComputer);
-            this.tabPage1.Controls.Add(this.label1);
-            this.tabPage1.Location = new System.Drawing.Point(0, 0);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(240, 245);
-            this.tabPage1.Text = "Connection";
+            this.tabConnection.BackColor = System.Drawing.Color.Tan;
+            this.tabConnection.Controls.Add(this.chkSavePassword);
+            this.tabConnection.Controls.Add(this.txtDomain);
+            this.tabConnection.Controls.Add(this.label4);
+            this.tabConnection.Controls.Add(this.txtPassword);
+            this.tabConnection.Controls.Add(this.label3);
+            this.tabConnection.Controls.Add(this.txtUserName);
+            this.tabConnection.Controls.Add(this.label2);
+            this.tabConnection.Controls.Add(this.txtComputer);
+            this.tabConnection.Controls.Add(this.label1);
+            this.tabConnection.Location = new System.Drawing.Point(0, 0);
+            this.tabConnection.Name = "tabConnection";
+            this.tabConnection.Size = new System.Drawing.Size(240, 245);
+            this.tabConnection.Text = "Connection";
             // 
             // chkSavePassword
             // 
@@ -191,20 +215,44 @@
             this.label1.Size = new System.Drawing.Size(71, 14);
             this.label1.Text = "Computer:";
             // 
-            // tabPage2
+            // tabScreen
             // 
-            this.tabPage2.BackColor = System.Drawing.Color.Silver;
-            this.tabPage2.Controls.Add(this.pictureBox1);
-            this.tabPage2.Controls.Add(this.label10);
-            this.tabPage2.Controls.Add(this.label9);
-            this.tabPage2.Controls.Add(this.cboColors);
-            this.tabPage2.Controls.Add(this.chkFitRemoteDesktop);
-            this.tabPage2.Controls.Add(this.chkFullScreen);
-            this.tabPage2.Controls.Add(this.label5);
-            this.tabPage2.Location = new System.Drawing.Point(0, 0);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(240, 245);
-            this.tabPage2.Text = "Screen";
+            this.tabScreen.BackColor = System.Drawing.Color.Silver;
+            this.tabScreen.Controls.Add(this.pictureBox1);
+            this.tabScreen.Controls.Add(this.label10);
+            this.tabScreen.Controls.Add(this.label9);
+            this.tabScreen.Controls.Add(this.cboColors);
+            this.tabScreen.Controls.Add(this.chkFitRemoteDesktop);
+            this.tabScreen.Controls.Add(this.chkFullScreen);
+            this.tabScreen.Controls.Add(this.label5);
+            this.tabScreen.Location = new System.Drawing.Point(0, 0);
+            this.tabScreen.Name = "tabScreen";
+            this.tabScreen.Size = new System.Drawing.Size(232, 242);
+            this.tabScreen.Text = "Screen";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Black;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 26);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(237, 2);
+            // 
+            // label10
+            // 
+            this.label10.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+            this.label10.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.label10.Location = new System.Drawing.Point(7, 6);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(180, 22);
+            this.label10.Text = "Options";
+            // 
+            // label9
+            // 
+            this.label9.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+            this.label9.Location = new System.Drawing.Point(8, 97);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(180, 18);
+            this.label9.Text = "Remote desktop display";
             // 
             // cboColors
             // 
@@ -240,20 +288,79 @@
             this.label5.Size = new System.Drawing.Size(71, 14);
             this.label5.Text = "Colors:";
             // 
-            // tabPage3
+            // tab_resources
             // 
-            this.tabPage3.BackColor = System.Drawing.SystemColors.Info;
-            this.tabPage3.Controls.Add(this.btnBrowse);
-            this.tabPage3.Controls.Add(this.cboEmulationMode);
-            this.tabPage3.Controls.Add(this.txtArguments);
-            this.tabPage3.Controls.Add(this.txtStartOnExit);
-            this.tabPage3.Controls.Add(this.label7);
-            this.tabPage3.Controls.Add(this.label8);
-            this.tabPage3.Controls.Add(this.label6);
-            this.tabPage3.Location = new System.Drawing.Point(0, 0);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(232, 242);
-            this.tabPage3.Text = "Extras";
+            this.tab_resources.Controls.Add(this.cbo_RemoteDesktopSound);
+            this.tab_resources.Controls.Add(this.cbo_DeviceStorage);
+            this.tab_resources.Controls.Add(this.label13);
+            this.tab_resources.Controls.Add(this.label12);
+            this.tab_resources.Controls.Add(this.pictureBox2);
+            this.tab_resources.Controls.Add(this.label11);
+            this.tab_resources.Location = new System.Drawing.Point(0, 0);
+            this.tab_resources.Name = "tab_resources";
+            this.tab_resources.Size = new System.Drawing.Size(232, 242);
+            this.tab_resources.Text = "Resources";
+            // 
+            // cbo_RemoteDesktopSound
+            // 
+            this.cbo_RemoteDesktopSound.Location = new System.Drawing.Point(7, 122);
+            this.cbo_RemoteDesktopSound.Name = "cbo_RemoteDesktopSound";
+            this.cbo_RemoteDesktopSound.Size = new System.Drawing.Size(217, 22);
+            this.cbo_RemoteDesktopSound.TabIndex = 7;
+            // 
+            // cbo_DeviceStorage
+            // 
+            this.cbo_DeviceStorage.Location = new System.Drawing.Point(7, 64);
+            this.cbo_DeviceStorage.Name = "cbo_DeviceStorage";
+            this.cbo_DeviceStorage.Size = new System.Drawing.Size(217, 22);
+            this.cbo_DeviceStorage.TabIndex = 7;
+            // 
+            // label13
+            // 
+            this.label13.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+            this.label13.Location = new System.Drawing.Point(7, 101);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(180, 18);
+            this.label13.Text = "Remote desktop sound";
+            // 
+            // label12
+            // 
+            this.label12.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+            this.label12.Location = new System.Drawing.Point(7, 43);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(180, 18);
+            this.label12.Text = "Device storage";
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackColor = System.Drawing.Color.Black;
+            this.pictureBox2.Location = new System.Drawing.Point(0, 24);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(237, 2);
+            // 
+            // label11
+            // 
+            this.label11.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+            this.label11.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.label11.Location = new System.Drawing.Point(7, 4);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(180, 22);
+            this.label11.Text = "Options";
+            // 
+            // tabExtras
+            // 
+            this.tabExtras.BackColor = System.Drawing.SystemColors.Info;
+            this.tabExtras.Controls.Add(this.btnBrowse);
+            this.tabExtras.Controls.Add(this.cboEmulationMode);
+            this.tabExtras.Controls.Add(this.txtArguments);
+            this.tabExtras.Controls.Add(this.txtStartOnExit);
+            this.tabExtras.Controls.Add(this.label7);
+            this.tabExtras.Controls.Add(this.label8);
+            this.tabExtras.Controls.Add(this.label6);
+            this.tabExtras.Location = new System.Drawing.Point(0, 0);
+            this.tabExtras.Name = "tabExtras";
+            this.tabExtras.Size = new System.Drawing.Size(232, 242);
+            this.tabExtras.Text = "Extras";
             // 
             // btnBrowse
             // 
@@ -311,88 +418,191 @@
             this.label6.Size = new System.Drawing.Size(71, 14);
             this.label6.Text = "Start On Exit:";
             // 
-            // tab_resources
+            // tabKeepBusy
             // 
-            this.tab_resources.Controls.Add(this.cbo_RemoteDesktopSound);
-            this.tab_resources.Controls.Add(this.cbo_DeviceStorage);
-            this.tab_resources.Controls.Add(this.label13);
-            this.tab_resources.Controls.Add(this.label12);
-            this.tab_resources.Controls.Add(this.pictureBox2);
-            this.tab_resources.Controls.Add(this.label11);
-            this.tab_resources.Location = new System.Drawing.Point(0, 0);
-            this.tab_resources.Name = "tab_resources";
-            this.tab_resources.Size = new System.Drawing.Size(240, 245);
-            this.tab_resources.Text = "Resources";
+            this.tabKeepBusy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.tabKeepBusy.Controls.Add(this.chkKey);
+            this.tabKeepBusy.Controls.Add(this.chkMouse);
+            this.tabKeepBusy.Controls.Add(this.numericInterval);
+            this.tabKeepBusy.Controls.Add(this.numericWidth);
+            this.tabKeepBusy.Controls.Add(this.numericLen);
+            this.tabKeepBusy.Controls.Add(this.numericY);
+            this.tabKeepBusy.Controls.Add(label17);
+            this.tabKeepBusy.Controls.Add(this.numericX);
+            this.tabKeepBusy.Controls.Add(label16);
+            this.tabKeepBusy.Controls.Add(label15);
+            this.tabKeepBusy.Controls.Add(label14);
+            this.tabKeepBusy.Controls.Add(label19);
+            this.tabKeepBusy.Controls.Add(label18);
+            this.tabKeepBusy.Controls.Add(label);
+            this.tabKeepBusy.Location = new System.Drawing.Point(0, 0);
+            this.tabKeepBusy.Name = "tabKeepBusy";
+            this.tabKeepBusy.Size = new System.Drawing.Size(240, 245);
+            this.tabKeepBusy.Text = "RDM_KeepBusy";
             // 
-            // label9
+            // label
             // 
-            this.label9.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
-            this.label9.Location = new System.Drawing.Point(8, 97);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(180, 18);
-            this.label9.Text = "Remote desktop display";
+            label.Location = new System.Drawing.Point(10, 11);
+            label.Name = "label";
+            label.Size = new System.Drawing.Size(87, 18);
+            label.Text = "Indicator:";
             // 
-            // label10
+            // label14
             // 
-            this.label10.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
-            this.label10.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.label10.Location = new System.Drawing.Point(7, 6);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(180, 22);
-            this.label10.Text = "Options";
+            label14.Location = new System.Drawing.Point(6, 34);
+            label14.Name = "label14";
+            label14.Size = new System.Drawing.Size(28, 17);
+            label14.Text = "X:";
+            label14.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // pictureBox1
+            // label15
             // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Black;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 26);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(237, 2);
+            label15.Location = new System.Drawing.Point(7, 63);
+            label15.Name = "label15";
+            label15.Size = new System.Drawing.Size(27, 17);
+            label15.Text = "Y:";
+            label15.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // pictureBox2
+            // numericX
             // 
-            this.pictureBox2.BackColor = System.Drawing.Color.Black;
-            this.pictureBox2.Location = new System.Drawing.Point(0, 24);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(237, 2);
+            this.numericX.Location = new System.Drawing.Point(40, 35);
+            this.numericX.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericX.Name = "numericX";
+            this.numericX.Size = new System.Drawing.Size(58, 22);
+            this.numericX.TabIndex = 3;
+            this.numericX.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
-            // label11
+            // numericY
             // 
-            this.label11.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
-            this.label11.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.label11.Location = new System.Drawing.Point(7, 4);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(180, 22);
-            this.label11.Text = "Options";
+            this.numericY.Location = new System.Drawing.Point(40, 63);
+            this.numericY.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericY.Name = "numericY";
+            this.numericY.Size = new System.Drawing.Size(58, 22);
+            this.numericY.TabIndex = 3;
+            this.numericY.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
-            // label12
+            // label16
             // 
-            this.label12.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
-            this.label12.Location = new System.Drawing.Point(7, 43);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(180, 18);
-            this.label12.Text = "Device storage";
+            label16.Location = new System.Drawing.Point(114, 34);
+            label16.Name = "label16";
+            label16.Size = new System.Drawing.Size(46, 17);
+            label16.Text = "Len:";
+            label16.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // label13
+            // label17
             // 
-            this.label13.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
-            this.label13.Location = new System.Drawing.Point(7, 101);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(180, 18);
-            this.label13.Text = "Remote desktop sound";
+            label17.Location = new System.Drawing.Point(114, 63);
+            label17.Name = "label17";
+            label17.Size = new System.Drawing.Size(46, 17);
+            label17.Text = "Width:";
+            label17.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // cbo_DeviceStorage
+            // numericLen
             // 
-            this.cbo_DeviceStorage.Location = new System.Drawing.Point(7, 64);
-            this.cbo_DeviceStorage.Name = "cbo_DeviceStorage";
-            this.cbo_DeviceStorage.Size = new System.Drawing.Size(217, 22);
-            this.cbo_DeviceStorage.TabIndex = 7;
+            this.numericLen.Location = new System.Drawing.Point(166, 35);
+            this.numericLen.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numericLen.Name = "numericLen";
+            this.numericLen.Size = new System.Drawing.Size(58, 22);
+            this.numericLen.TabIndex = 3;
+            this.numericLen.Value = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
             // 
-            // cbo_RemoteDesktopSound
+            // numericWidth
             // 
-            this.cbo_RemoteDesktopSound.Location = new System.Drawing.Point(7, 122);
-            this.cbo_RemoteDesktopSound.Name = "cbo_RemoteDesktopSound";
-            this.cbo_RemoteDesktopSound.Size = new System.Drawing.Size(217, 22);
-            this.cbo_RemoteDesktopSound.TabIndex = 7;
+            this.numericWidth.Location = new System.Drawing.Point(166, 63);
+            this.numericWidth.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericWidth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericWidth.Name = "numericWidth";
+            this.numericWidth.Size = new System.Drawing.Size(58, 22);
+            this.numericWidth.TabIndex = 3;
+            this.numericWidth.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label18
+            // 
+            label18.Location = new System.Drawing.Point(10, 99);
+            label18.Name = "label18";
+            label18.Size = new System.Drawing.Size(87, 18);
+            label18.Text = "Interval:";
+            // 
+            // numericInterval
+            // 
+            this.numericInterval.Location = new System.Drawing.Point(103, 99);
+            this.numericInterval.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numericInterval.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericInterval.Name = "numericInterval";
+            this.numericInterval.Size = new System.Drawing.Size(58, 22);
+            this.numericInterval.TabIndex = 3;
+            this.numericInterval.Value = new decimal(new int[] {
+            240,
+            0,
+            0,
+            0});
+            // 
+            // label19
+            // 
+            label19.Location = new System.Drawing.Point(166, 101);
+            label19.Name = "label19";
+            label19.Size = new System.Drawing.Size(58, 18);
+            label19.Text = "sec.";
+            // 
+            // chkMouse
+            // 
+            this.chkMouse.Location = new System.Drawing.Point(103, 127);
+            this.chkMouse.Name = "chkMouse";
+            this.chkMouse.Size = new System.Drawing.Size(121, 19);
+            this.chkMouse.TabIndex = 8;
+            this.chkMouse.Text = "emulate mouse";
+            // 
+            // chkKey
+            // 
+            this.chkKey.Location = new System.Drawing.Point(103, 152);
+            this.chkKey.Name = "chkKey";
+            this.chkKey.Size = new System.Drawing.Size(121, 19);
+            this.chkKey.TabIndex = 8;
+            this.chkKey.Text = "emulate key";
             // 
             // Form1
             // 
@@ -407,10 +617,11 @@
             this.Name = "Form1";
             this.Text = "RDP AutoLogin Settings";
             this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage3.ResumeLayout(false);
+            this.tabConnection.ResumeLayout(false);
+            this.tabScreen.ResumeLayout(false);
             this.tab_resources.ResumeLayout(false);
+            this.tabExtras.ResumeLayout(false);
+            this.tabKeepBusy.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -420,9 +631,9 @@
         private System.Windows.Forms.MenuItem mnuExit;
         private System.Windows.Forms.MenuItem mnuSave;
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage tabConnection;
+        private System.Windows.Forms.TabPage tabScreen;
+        private System.Windows.Forms.TabPage tabExtras;
         private System.Windows.Forms.CheckBox chkSavePassword;
         private System.Windows.Forms.TextBox txtDomain;
         private System.Windows.Forms.Label label4;
@@ -453,6 +664,14 @@
         private System.Windows.Forms.ComboBox cbo_RemoteDesktopSound;
         private System.Windows.Forms.ComboBox cbo_DeviceStorage;
         private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TabPage tabKeepBusy;
+        private System.Windows.Forms.NumericUpDown numericWidth;
+        private System.Windows.Forms.NumericUpDown numericLen;
+        private System.Windows.Forms.NumericUpDown numericY;
+        private System.Windows.Forms.NumericUpDown numericX;
+        private System.Windows.Forms.NumericUpDown numericInterval;
+        private System.Windows.Forms.CheckBox chkKey;
+        private System.Windows.Forms.CheckBox chkMouse;
     }
 }
 

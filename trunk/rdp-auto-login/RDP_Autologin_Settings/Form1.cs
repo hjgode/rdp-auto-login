@@ -14,6 +14,7 @@ namespace RDP_Autologin_Settings
     public partial class Form1 : Form
     {
         RegSettings regSettings;
+        RDMKeepBusySettings rdmSett;
         public Form1()
         {
             InitializeComponent();
@@ -65,6 +66,21 @@ namespace RDP_Autologin_Settings
 
             cbo_DeviceStorage.SelectedIndex = iSett;
 
+            rdmSett = new RDMKeepBusySettings();
+            numericX.Value = rdmSett._lineX;
+            numericY.Value = rdmSett._lineY;
+            numericLen.Value = rdmSett._lineLen;
+            numericWidth.Value = rdmSett._lineWidth;
+            numericInterval.Value = rdmSett._sleepTime;
+            if (rdmSett._useKey==1)
+                chkKey.Checked = true;
+            else
+                chkKey.Checked = false;
+            if (rdmSett._useMouse == 1)
+                chkMouse.Checked = true;
+            else
+                chkMouse.Checked = false;
+
             enableChangeEvent();
         }
 
@@ -97,6 +113,20 @@ namespace RDP_Autologin_Settings
 
             //redirect audio
             regSettings._eAudioRedirectionMode = (RegSettings.enuAudioRedirectionMode)Enum.Parse(typeof(RegSettings.enuAudioRedirectionMode), cbo_RemoteDesktopSound.SelectedIndex.ToString(), true);
+
+            rdmSett._lineX = (int)numericX.Value;
+            rdmSett._lineY = (int)numericY.Value;
+            rdmSett._lineLen = (int)numericLen.Value;
+            rdmSett._lineWidth = (int)numericWidth.Value;
+            rdmSett._sleepTime = (int)numericInterval.Value;
+            if (chkMouse.Checked)
+                rdmSett._useMouse = 1;
+            else
+                rdmSett._useMouse = 0;
+            if (chkKey.Checked)
+                rdmSett._useKey = 1;
+            else
+                rdmSett._useKey = 0;
 
         }
 
@@ -136,6 +166,7 @@ namespace RDP_Autologin_Settings
                 {
                     storeSettings();
                     regSettings.saveAll();
+                    rdmSett.saveAll();
                 }
             Application.Exit();
         }
