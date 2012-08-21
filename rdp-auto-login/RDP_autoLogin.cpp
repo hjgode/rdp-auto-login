@@ -43,7 +43,7 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 			DispatchMessage(&msg);
 		}
 	}
-SetForegroundWindow(FindWindow(L"TSSHELLWND", NULL));
+	SetForegroundWindow(FindWindow(L"TSSHELLWND", NULL));
 	return msg.wParam;
 }
 

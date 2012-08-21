@@ -678,6 +678,12 @@ int startRDM(){
 	do{
 		cnt++;
 		//if tsc is already running, kill it
+
+		//first ensure TSSHELLWND is not minimized or connect will hang (why?)
+		HWND hwndTSC = FindWindow(L"TSSHELLWND",NULL);
+		if(hwndTSC!=NULL)
+			ShowWindow(hwndTSC, SW_SHOWNORMAL);
+
 		if(IsProcessRunning(L"wpctsc.exe")){
 			if( KillExeWindow(L"wpctsc.exe") ){
 				//killedit OK
@@ -722,15 +728,15 @@ int startRDM(){
 					iRet = -4; //error finding TSC dialog
 					continue;
 				}
-					else{
-						#ifdef DEBUG
-						DEBUGMSG(1, (L" ### ScanTSCwindow ### \r\n"));
-						scanTscWindow(hTscDialog); //scan TSC window and list child windows and CtrlIDs
-						DEBUGMSG(1, (L" --- ScanTSCwindow --- \r\n"));
-						#endif
-						isOK=TRUE;
-						iRet=0;
-					}
+				else{
+					#ifdef DEBUG
+					DEBUGMSG(1, (L" ### ScanTSCwindow ### \r\n"));
+					scanTscWindow(hTscDialog); //scan TSC window and list child windows and CtrlIDs
+					DEBUGMSG(1, (L" --- ScanTSCwindow --- \r\n"));
+					#endif
+					isOK=TRUE;
+					iRet=0;
+				}
 			}
 		}
 		else{
@@ -772,7 +778,7 @@ int startTSC()
 	GetUUID(szHWID);
 
 	LRESULT lRes=0;
-#ifdef DEBUG
+#ifdef DEBUG1
 	writeReg(); //write default settings to reg
 #endif
 	readReg();
