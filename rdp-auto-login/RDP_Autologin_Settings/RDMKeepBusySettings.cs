@@ -91,14 +91,17 @@ namespace RDP_Autologin_Settings
         }
         public byte key1 = 0x25;
         public byte key2 = 0x27;
-        public UInt32 lParam11 = 0x014D0001;
-        public UInt32 lParam12 = 0xC14D0001;
-        public UInt32 lParam21 = 0x014B0001;
-        public UInt32 lParam22 = 0xC14B0001;
+        public DWORD lParam11 = 0x014D0001;
+        public DWORD lParam12 = 0xC14D0001;
+        public DWORD lParam21 = 0x014B0001;
+        public DWORD lParam22 = 0xC14B0001;
         #endregion
 
         bool bNewRegWritten = false;
-
+        public bool _bNewRegWritten
+        {
+            get { return bNewRegWritten; }
+        }
         public RDMKeepBusySettings()
         {
             try
@@ -187,7 +190,7 @@ namespace RDP_Autologin_Settings
         }
         void writeInt(string sName, UInt32 iVal)
         {
-            rk.SetValue(sName, iVal, RegistryValueKind.DWord);
+            rk.SetValue(sName, iVal, RegistryValueKind.DWord); //0xc14d0001
         }
 
         int readIntFromDWORD(string sName)
