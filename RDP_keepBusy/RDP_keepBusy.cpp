@@ -17,6 +17,10 @@
 //#define USE_KEYBD
 
 #define sMUTEX L"RDMKEEPBUSY"
+#define sEvent L"STOPRDMKEEPBUSY"	//let RDMKeepbusy shutdown
+BOOL _bRunApp = TRUE;				//the var that lets exit the code
+DWORD idThreadWatch=0;				//the thread that waits for shutdown event
+HANDLE hEventWatch=NULL;			//let the background thread show the actual status
 
 int		lineHeight=1;		//progress bar height
 int		drawPoint=319;
@@ -24,6 +28,114 @@ int		BarPosition=0;
 int		screenWidth = GetSystemMetrics(SM_CXSCREEN);
 HDC		hdc = GetDC(NULL);
 HPEN	lineProgress,lineBackground,po;	// Pen Progress bar
+
+//thread that controls the exit of the app
+DWORD myWatchThread(LPVOID lpParam){
+	DWORD dwRet=0;
+	hEventWatch= CreateEvent(NULL, TRUE, FALSE, sEvent);
+	if(hEventWatch!=NULL){
+		if(GetLastError()==ERROR_ALREADY_EXISTS){
+			nclog(L"CreateEvent: Event '%s' already exists\n", sEvent);
+		}
+		else
+			nclog(L"CreateEvent: Event '%s' did not yet exist\n", sEvent);
+		//now start to wait for the event to be signaled
+		do{
+		DWORD dwRes = WaitForSingleObject(hEventWatch, INFINITE);
+			switch(dwRes){
+				case WAIT_ABANDONED:
+					break;
+				case WAIT_TIMEOUT:
+					break;
+				case WAIT_OBJECT_0:
+					_bRunApp=FALSE; //let the main loop exit
+					break;
+				case WAIT_FAILED:
+					break;
+				default:
+					break;
+			}
+		}while(_bRunApp);
+		dwRet=1;
+	}
+	else{
+		nclog(L"CreateEvent failed: GetLastError=%u\n", GetLastError());
+		dwRet=-1;
+	}
+	return dwRet;
+}
+
+int DrawLine(int pos){
+	DWORD dwStatus=stopped;
+	static BOOL bToggle=false;
+	
+	//hdc = GetDC(GetForegroundWindow());
+	HWND hwndDraw;
+	hwndDraw=FindWindow(L"HHTASKBAR", NULL);
+	hdc = GetDC(hwndDraw);
+
+	EnterCriticalSection(&myCriticalSection);
+	dwStatus=g_dwStatus;
+	LeaveCriticalSection(&myCriticalSection);
+
+	//move start point to x,y (ie 0,319
+	MoveToEx(hdc,drawPointX,drawPointY,NULL);
+
+	//draw a line to pos/drawpointY
+	//Sleep(300);
+	if(bToggle){
+		switch (dwStatus){
+			case idle:
+				po=(HPEN)SelectObject(hdc,lineYellow);
+				break;
+			case stopped:
+				po=(HPEN)SelectObject(hdc,lineBack);
+				break;
+			case active:
+				po=(HPEN)SelectObject(hdc,lineGreen);
+				break;
+			case notfound:
+				po=(HPEN)SelectObject(hdc,lineRed);
+				break;
+			default:
+				po=(HPEN)SelectObject(hdc,lineBack);
+				break;
+		}
+		//ie to 30/2,319
+		LineTo(hdc, lineLength, drawPointY);
+	}
+	else{
+		po = (HPEN)SelectObject(hdc,lineBack); 
+		//ie to 30,319
+		LineTo(hdc, lineLength, drawPointY); 
+	}
+	bToggle=!bToggle;
+
+	MoveToEx(hdc,drawPointX,drawPointY,NULL);
+	ReleaseDC(hwndDraw, hdc);
+	UpdateWindow(hwndDraw);
+	return 0;
+}
+
+//background thread to draw an animation
+DWORD myThread(LPVOID lpParam){
+	static BOOL bToggle=false;
+
+	//line color pens
+	lineBack = CreatePen(PS_SOLID, lineHeight, RGB(127,127,127));
+	lineYellow = CreatePen(PS_SOLID, lineHeight, RGB(255,255,0));
+	lineRed = CreatePen(PS_SOLID, lineHeight, RGB(255,0,0));
+	lineGreen = CreatePen(PS_SOLID, lineHeight, RGB(0,255,0));
+
+//	HWND hDesk;
+	do{
+		DrawLine(lineLength);
+		bToggle=!bToggle;
+		Sleep(1000);
+	}while(runThread);
+	ExitThread(0);
+	return 0;
+}
 
 HWND findWindow(HWND hWndStart, TCHAR* szTitle){
 
@@ -124,6 +236,14 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 	//already running?
 	BOOL bOwnerShip = false;
 
+	//exit all instances?
+	if( wcslen(lpCmdLine)>0 && _wcsicmp(L"stop", lpCmdLine)==0)
+	{
+		HANDLE hEvent = CreateEvent(NULL, TRUE, FALSE, sEvent);
+		SetEvent(sEvent);	//signal the instance to exit
+		return 2;
+	}
+
 	//allow only one instance
 	nclog(L"CreateMutex...");
 	HANDLE hMutex = CreateMutex(NULL, bOwnerShip, sMUTEX);
@@ -161,7 +281,8 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 		if (!ShellExecuteEx(&sei))
 		{
 			MessageBox(NULL, TEXT("Couldn't launch RDP Client"), TEXT("Remote Desktop Launcher"), MB_OK | MB_TOPMOST | MB_SETFOREGROUND);
-			goto Exit;
+			//goto Exit;
+			Sleep(500);
 		}
 		else{
 			nclog(L"RDP client started, sleeping 500ms...\n");
@@ -170,6 +291,11 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 	}
 	lineProgress = CreatePen(PS_SOLID,lineHeight,RGB(255,0,0)); // Progress bar
 	SetTimer(NULL, 11011, 1000, myTimerProc);
+
+	//create the watch thread to be able to exit the app
+	HANDLE hThreadWatch = CreateThread(NULL, 0, myWatchThread, NULL, 0, &idThreadWatch);
+	nclog(L"WatchDog thread handle=%u\n", hThreadWatch);
+
     //Now every X minutes check if it's still running and if so "refresh" its window
     //if it's no longer running, exit
     do 
@@ -222,12 +348,13 @@ int WINAPI WinMain(	HINSTANCE hInstance,
         }
         else 
         {
-			nclog(L"FindWindow failed for 'TSSHELLWND'\n");
+			nclog(L"FindWindow failed for 'TSSHELLWND'. Sleep 1000\n");
+			Sleep(1000);
             //RDP Client is not running - let's exit
-            goto Exit;
+            //goto Exit;
         }
     }
-    while (TRUE); //The check (NULL != hWndRDM) is already done inside the loop
+    while (_bRunApp); //The check (NULL != hWndRDM) is already done inside the loop
 
 
 Exit:
