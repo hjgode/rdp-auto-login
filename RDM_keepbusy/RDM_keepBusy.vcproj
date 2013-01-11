@@ -63,6 +63,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				ExecutionBucket="7"
 				Optimization="0"
 				PreprocessorDefinitions="DEBUG;ARM;_ARM_;ARMV4I;UNDER_CE=$(CEVER);_WIN32_WCE=$(CEVER);$(CePlatform);UNICODE"
 				RuntimeLibrary="1"
@@ -126,7 +127,7 @@
 			/>
 			<DeploymentTool
 				ForceDirty="-1"
-				RemoteDirectory=""
+				RemoteDirectory="\windows"
 				RegisterOutput="0"
 				AdditionalFiles=""
 			/>

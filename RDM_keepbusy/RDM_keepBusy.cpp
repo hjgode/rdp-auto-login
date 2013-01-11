@@ -341,7 +341,10 @@ HWND getTSChandle(){
 	HWND hWndRDM = FindWindow(_T("TSSHELLWND"), NULL);
 
 	HWND hTSCWND = findWindow(hWndRDM, L"Input Capture Window");
-	DEBUGMSG(1, (L"Found Input Capture Window, Handle=0x%0x\n", hTSCWND));
+	if(hTSCWND)
+		DEBUGMSG(1, (L"getTSChandle(): Found Input Capture Window, Handle=0x%0x\n", hTSCWND));
+	else
+		DEBUGMSG(1, (L"getTSChandle(): No Input Capture Windowfound\n"));
 	return hTSCWND;
 }
 
@@ -615,9 +618,6 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 
 	int iCounter=0;
 	
-	if( wcslen(lpCmdLine)>0 && wcsstr(lpCmdLine, L"dologging")!=0)
-		ncLogEnabled=TRUE;
-
 	//allow only one instance
 	nclog(L"CreateMutex...");
 	HANDLE hMutex = CreateMutex(NULL, bOwnerShip, sMUTEX);
@@ -633,6 +633,7 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 		}
 	}
 	nclog(L"no Mutex. Continueing..!\n");
+
     HWND hWndRDM = NULL;
 	HWND hWinShell = NULL;
 	HWND hTSC = NULL;
@@ -640,26 +641,36 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 	//check command line args
 	nclog(L"lpCmdLine= '%s'\n", lpCmdLine);
 
+	//enable logging to file?
+	if( wcslen(lpCmdLine)>0 && wcsstr(lpCmdLine, L"dologging")!=0)
+		ncLogEnabled=TRUE;
+
 	if( wcslen(lpCmdLine)>0 && _wcsicmp(L"noRDPstart", lpCmdLine)==0)
 	{
 		nclog(L"RDP client will not be started, lpCmdLine 'noRDPstart' found\n");
 	}
 	else{
 		//First check if TSC is already running???
-		//Firstly launch RDP Client
-		SHELLEXECUTEINFO sei = {0};
-		sei.cbSize = sizeof(sei);
-		sei.nShow = SW_SHOWNORMAL; 
-		sei.lpFile = TEXT("\\Windows\\wpctsc.exe");
-		sei.lpParameters = TEXT(" ");
-		if (!ShellExecuteEx(&sei))
-		{
-			MessageBox(NULL, TEXT("Couldn't launch RDP Client"), TEXT("Remote Desktop Launcher"), MB_OK | MB_TOPMOST | MB_SETFOREGROUND);
-			goto Exit;
+		HWND hwndTemp = getTSChandle();
+		if(hwndTemp!=NULL){	//found a running TSC window
+			nclog(L"TSC is already running\n");
 		}
-		else{
-			nclog(L"RDP client started, sleeping 500ms...\n");
-			Sleep(500);
+		else{ //start a new TSC client
+			//Firstly launch RDP Client
+			SHELLEXECUTEINFO sei = {0};
+			sei.cbSize = sizeof(sei);
+			sei.nShow = SW_SHOWNORMAL; 
+			sei.lpFile = TEXT("\\Windows\\wpctsc.exe");
+			sei.lpParameters = TEXT(" ");
+			if (!ShellExecuteEx(&sei))
+			{
+				MessageBox(NULL, TEXT("Couldn't launch RDP Client"), TEXT("Remote Desktop Launcher"), MB_OK | MB_TOPMOST | MB_SETFOREGROUND);
+				goto Exit;
+			}
+			else{
+				nclog(L"RDP client started, sleeping 500ms...\n");
+				Sleep(500);
+			}
 		}
 	}
 
@@ -690,6 +701,7 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 		nclog(L"FindWindow 'TSSHELLWND'...\n");
         hWndRDM = getTSChandle();
 		if(hWndRDM!=NULL){
+			nclog(L"'TSSHELLWND' found.\n");
 			//window found
 			EnterCriticalSection(&myCriticalSection);
 
@@ -700,20 +712,32 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 			//find if window text starts with text
 			HWND hwndTest = FindWindow(L"TSSHELLWND", NULL);
 			if(hwndTest!=NULL){
+				nclog(L"check for TSSHELLWND is active\n");
 				GetWindowText(hwndTest, szTitle, MAX_PATH);
 				pFound=wcsstr(szTitle, szSearch);
 				if(pFound!=NULL){
+					nclog(L"Found 'Remote Desktop Mobile' in title\n");
 					pos=(int)(pFound-szTitle + 1);
 					if(pos==1) //the window text starts with "Remote Desktop Mobile"
+					{
+						nclog(L"'Remote Desktop Mobile' is idle\n");
 						g_dwStatus=idle;
+					}
 					else
+					{
+						nclog(L"'Remote Desktop Mobile' is active\n");
 						g_dwStatus=active;
+					}
 				}
-				else
+				else{
+					nclog(L"'Remote Desktop Mobile' is not active\n");
 					g_dwStatus=notfound;
+				}
 			}
-			else
+			else{
+				nclog(L"'Remote Desktop Mobile' is not found\n");
 				g_dwStatus=notfound;
+			}
 
 			LeaveCriticalSection(&myCriticalSection);
 
