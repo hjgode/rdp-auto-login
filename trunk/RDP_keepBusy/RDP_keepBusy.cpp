@@ -65,77 +65,77 @@ DWORD myWatchThread(LPVOID lpParam){
 	return dwRet;
 }
 
-int DrawLine(int pos){
-	DWORD dwStatus=stopped;
-	static BOOL bToggle=false;
-	
-	//hdc = GetDC(GetForegroundWindow());
-	HWND hwndDraw;
-	hwndDraw=FindWindow(L"HHTASKBAR", NULL);
-	hdc = GetDC(hwndDraw);
-
-	EnterCriticalSection(&myCriticalSection);
-	dwStatus=g_dwStatus;
-	LeaveCriticalSection(&myCriticalSection);
-
-	//move start point to x,y (ie 0,319
-	MoveToEx(hdc,drawPointX,drawPointY,NULL);
-
-	//draw a line to pos/drawpointY
-	//Sleep(300);
-	if(bToggle){
-		switch (dwStatus){
-			case idle:
-				po=(HPEN)SelectObject(hdc,lineYellow);
-				break;
-			case stopped:
-				po=(HPEN)SelectObject(hdc,lineBack);
-				break;
-			case active:
-				po=(HPEN)SelectObject(hdc,lineGreen);
-				break;
-			case notfound:
-				po=(HPEN)SelectObject(hdc,lineRed);
-				break;
-			default:
-				po=(HPEN)SelectObject(hdc,lineBack);
-				break;
-		}
-		//ie to 30/2,319
-		LineTo(hdc, lineLength, drawPointY);
-	}
-	else{
-		po = (HPEN)SelectObject(hdc,lineBack); 
-		//ie to 30,319
-		LineTo(hdc, lineLength, drawPointY); 
-	}
-	bToggle=!bToggle;
-
-	MoveToEx(hdc,drawPointX,drawPointY,NULL);
-	ReleaseDC(hwndDraw, hdc);
-	UpdateWindow(hwndDraw);
-	return 0;
-}
+//int DrawLine(int pos){
+//	DWORD dwStatus=stopped;
+//	static BOOL bToggle=false;
+//	
+//	//hdc = GetDC(GetForegroundWindow());
+//	HWND hwndDraw;
+//	hwndDraw=FindWindow(L"HHTASKBAR", NULL);
+//	hdc = GetDC(hwndDraw);
+//
+//	EnterCriticalSection(&myCriticalSection);
+//	dwStatus=g_dwStatus;
+//	LeaveCriticalSection(&myCriticalSection);
+//
+//	//move start point to x,y (ie 0,319
+//	MoveToEx(hdc,drawPointX,drawPointY,NULL);
+//
+//	//draw a line to pos/drawpointY
+//	//Sleep(300);
+//	if(bToggle){
+//		switch (dwStatus){
+//			case idle:
+//				po=(HPEN)SelectObject(hdc,lineYellow);
+//				break;
+//			case stopped:
+//				po=(HPEN)SelectObject(hdc,lineBack);
+//				break;
+//			case active:
+//				po=(HPEN)SelectObject(hdc,lineGreen);
+//				break;
+//			case notfound:
+//				po=(HPEN)SelectObject(hdc,lineRed);
+//				break;
+//			default:
+//				po=(HPEN)SelectObject(hdc,lineBack);
+//				break;
+//		}
+//		//ie to 30/2,319
+//		LineTo(hdc, lineLength, drawPointY);
+//	}
+//	else{
+//		po = (HPEN)SelectObject(hdc,lineBack); 
+//		//ie to 30,319
+//		LineTo(hdc, lineLength, drawPointY); 
+//	}
+//	bToggle=!bToggle;
+//
+//	MoveToEx(hdc,drawPointX,drawPointY,NULL);
+//	ReleaseDC(hwndDraw, hdc);
+//	UpdateWindow(hwndDraw);
+//	return 0;
+//}
 
 //background thread to draw an animation
-DWORD myThread(LPVOID lpParam){
-	static BOOL bToggle=false;
-
-	//line color pens
-	lineBack = CreatePen(PS_SOLID, lineHeight, RGB(127,127,127));
-	lineYellow = CreatePen(PS_SOLID, lineHeight, RGB(255,255,0));
-	lineRed = CreatePen(PS_SOLID, lineHeight, RGB(255,0,0));
-	lineGreen = CreatePen(PS_SOLID, lineHeight, RGB(0,255,0));
-
-//	HWND hDesk;
-	do{
-		DrawLine(lineLength);
-		bToggle=!bToggle;
-		Sleep(1000);
-	}while(runThread);
-	ExitThread(0);
-	return 0;
-}
+//DWORD myThread(LPVOID lpParam){
+//	static BOOL bToggle=false;
+//
+//	//line color pens
+//	lineBack = CreatePen(PS_SOLID, lineHeight, RGB(127,127,127));
+//	lineYellow = CreatePen(PS_SOLID, lineHeight, RGB(255,255,0));
+//	lineRed = CreatePen(PS_SOLID, lineHeight, RGB(255,0,0));
+//	lineGreen = CreatePen(PS_SOLID, lineHeight, RGB(0,255,0));
+//
+////	HWND hDesk;
+//	do{
+//		DrawLine(lineLength);
+//		bToggle=!bToggle;
+//		Sleep(1000);
+//	}while(runThread);
+//	ExitThread(0);
+//	return 0;
+//}
 
 HWND findWindow(HWND hWndStart, TCHAR* szTitle){
 
