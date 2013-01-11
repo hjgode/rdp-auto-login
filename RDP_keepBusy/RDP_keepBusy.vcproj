@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="RDP_keepBusy"
+	Name="RDP_keepBusy_deprecated"
 	ProjectGUID="{3A152083-BDFC-402B-A8AC-DBEF9819D05A}"
 	RootNamespace="RDP_keepBusy"
 	SccProjectName="Svn"
