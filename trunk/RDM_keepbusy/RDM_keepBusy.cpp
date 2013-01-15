@@ -3,7 +3,10 @@
 
 #include "stdafx.h"
 
-#ifdef DEBUG
+#define TEST
+#undef TEST
+
+#ifdef TEST
 	//4 second
 	DWORD _dwSLEEPTIME = 4000;
 #else
@@ -39,7 +42,7 @@ int		drawPointY=1;		//start to draw a line (vertical pos)
 int		lineLength = 30; //GetSystemMetrics(SM_CXSCREEN);
 HDC		hdc = NULL;	//get DC of desktop window
 HPEN	po;	// Pen Progress bar
-HPEN	lineBack, lineRed, lineYellow, lineGreen;
+HPEN	lineBack, lineRed, lineYellow, lineGreen, lineOrange;
 HPEN	lineOrg;
 
 // Global variable to avoid concurrent access
@@ -49,6 +52,7 @@ enum stati{
 	stopped,
 	notfound,
 	active,
+	inactive,
 	idle
 };
 //the var to hold the current status
@@ -259,25 +263,24 @@ int readReg(){
 	return 0;
 }
 
+BOOL bFoundWindow=FALSE;
+HWND hFoundHWND=NULL;
 HWND findWindow(HWND hWndStart, TCHAR* szTitle){
 
 	HWND hWnd = NULL;
 	HWND hWnd1 = NULL;
-
-	static BOOL bFoundIt=FALSE;
-	static HWND hFoundHWND=NULL;
-
+	
 	hWnd = hWndStart;
 	TCHAR cszWindowString [MAX_PATH]; // = new TCHAR(MAX_PATH);
 	TCHAR cszClassString [MAX_PATH]; //= new TCHAR(MAX_PATH);
 
-	while (hWnd!=NULL && !bFoundIt){
+	while (hWnd!=NULL && !bFoundWindow){
 		GetClassName(hWnd, cszClassString, MAX_PATH);
 		GetWindowText(hWnd, cszWindowString, MAX_PATH);
 		nclog(L"findWindow: \"%s\"  \"%s\"\n", cszClassString, cszWindowString);
 
 		if(wcscmp(cszWindowString, szTitle)==0){
-			bFoundIt=TRUE;
+			bFoundWindow=TRUE;
 			hFoundHWND=hWnd;
 			return hFoundHWND;
 		}
@@ -291,26 +294,25 @@ HWND findWindow(HWND hWndStart, TCHAR* szTitle){
 	}
 	return hFoundHWND;
 }
+BOOL bFoundClass=FALSE;
+HWND hFoundHWNDClass=NULL;
 HWND findWindowByClass(HWND hWndStart, TCHAR* szClass){
 
 	HWND hWnd = NULL;
 	HWND hWnd1 = NULL;
 
-	static BOOL bFoundIt=FALSE;
-	static HWND hFoundHWND=NULL;
-
 	hWnd = hWndStart;
 	TCHAR cszWindowString [MAX_PATH]; // = new TCHAR(MAX_PATH);
 	TCHAR cszClassString [MAX_PATH]; //= new TCHAR(MAX_PATH);
 
-	while (hWnd!=NULL && !bFoundIt){
+	while (hWnd!=NULL && bFoundClass==FALSE){
 		GetClassName(hWnd, cszClassString, MAX_PATH);
 		GetWindowText(hWnd, cszWindowString, MAX_PATH);
 		nclog(L"findWindow: \"%s\"  \"%s\"\n", cszClassString, cszWindowString);
 
 		if(wcscmp(cszWindowString, szClass)==0){
-			bFoundIt=TRUE;
-			hFoundHWND=hWnd;
+			bFoundClass=TRUE;
+			hFoundHWNDClass=hWnd;
 			return hFoundHWND;
 		}
 
@@ -340,6 +342,11 @@ HWND getTSChandle(){
 	//Find the top levvel window
 	HWND hWndRDM = FindWindow(_T("TSSHELLWND"), NULL);
 
+	//init find vars moved from being static inside findWindow() and findWindowByClass(), v15.01.2013
+	bFoundWindow=FALSE;
+	bFoundClass=FALSE;
+	hFoundHWND=NULL;
+	hFoundHWNDClass=NULL;
 	HWND hTSCWND = findWindow(hWndRDM, L"Input Capture Window");
 	if(hTSCWND)
 		DEBUGMSG(1, (L"getTSChandle(): Found Input Capture Window, Handle=0x%0x\n", hTSCWND));
@@ -414,6 +421,9 @@ int DrawLine(int pos){
 			case active:
 				po=(HPEN)SelectObject(hdc,lineGreen);
 				break;
+			case inactive:
+				po=(HPEN)SelectObject(hdc,lineOrange);
+				break;
 			case notfound:
 				po=(HPEN)SelectObject(hdc,lineRed);
 				break;
@@ -467,6 +477,7 @@ DWORD myThread(LPVOID lpParam){
 	lineYellow = CreatePen(PS_SOLID, lineHeight, RGB(255,255,0));
 	lineRed = CreatePen(PS_SOLID, lineHeight, RGB(255,0,0));
 	lineGreen = CreatePen(PS_SOLID, lineHeight, RGB(0,255,0));
+	lineOrange = CreatePen(PS_SOLID, lineHeight, RGB(0xff,0x90,0));
 
 //	HWND hDesk;
 	do{
@@ -517,8 +528,17 @@ void doMouseMove(HWND hWndRDM){
 
 	//get some info on the window
 	RECT rect;
-	GetWindowRect(hWndRDM, &rect);
-	nclog(L"GetWindowRect: %i,%i : %i,%i\n", rect.left, rect.top, rect.right, rect.bottom);
+	if(GetWindowRect(hWndRDM, &rect)){
+		nclog(L"GetWindowRect: %i,%i : %i,%i\n", rect.left, rect.top, rect.right, rect.bottom);
+		if(rect.top<0 || rect.bottom<0 || rect.left<0 || rect.right<0)
+		{
+			nclog(L"RDM active window outside screen (inactive?)\n");
+			nclog(L"RDM hwnd=0x%x, foreground hwnd=0x%x\n", hWndRDM, GetForegroundWindow());
+		}
+	}
+	else{
+		nclog(L"GetWindowRect()failed. GetLastError()=%i\n", GetLastError());	//get 1400=invalid window handle on subsequent calls!?
+	}
     ////Get foreground window -- this is not needed if RDM is launched Full-Screen as it was in this case
     //hWndForeground = GetForegroundWindow();
     //Sleep(500);
@@ -699,7 +719,7 @@ int WINAPI WinMain(	HINSTANCE hInstance,
     {
         //check if RDP Client is running, otherwise exit?
 		nclog(L"FindWindow 'TSSHELLWND'...\n");
-        hWndRDM = getTSChandle();
+        hWndRDM = getTSChandle();	//get correct window handle?, test with GetWindowRect()
 		if(hWndRDM!=NULL){
 			nclog(L"'TSSHELLWND' found.\n");
 			//window found
@@ -731,7 +751,7 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 				}
 				else{
 					nclog(L"'Remote Desktop Mobile' is not active\n");
-					g_dwStatus=notfound;
+					g_dwStatus=inactive;
 				}
 			}
 			else{
@@ -742,7 +762,7 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 			LeaveCriticalSection(&myCriticalSection);
 
 			//did we reach the timeout
-			if(ii==0){
+			if(ii==0 && g_dwStatus==active){
 				nclog(L"Calling doMouseMove()\n");
 				doMouseMove(hWndRDM);
 			}

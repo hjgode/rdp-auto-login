@@ -194,6 +194,7 @@ Global
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).Deploy.0 = Release|Any CPU
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Release|Windows Mobile 5.0 Smartphone SDK (ARMV4I).ActiveCfg = Release|Any CPU
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Release|Windows Mobile 6 Professional SDK (ARMV4I).ActiveCfg = Release|Any CPU
+		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Release|Windows Mobile 6 Professional SDK (ARMV4I).Build.0 = Release|Any CPU
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Release|Windows Mobile 6 Standard SDK (ARMV4I).ActiveCfg = Release|Any CPU
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Release|Windows Mobile 6.5.3 Professional DTK (ARMV4I).ActiveCfg = Release|Any CPU
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug Settings|Any CPU.ActiveCfg = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
@@ -347,7 +348,8 @@ Global
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Release|STANDARDSDK_500 (x86).Deploy.0 = Release|STANDARDSDK_500 (x86)
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I).ActiveCfg = Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I)
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Release|Windows Mobile 5.0 Smartphone SDK (ARMV4I).ActiveCfg = Release|STANDARDSDK_500 (MIPSIV_FP)
-		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Release|Windows Mobile 6 Professional SDK (ARMV4I).ActiveCfg = Release|STANDARDSDK_500 (MIPSIV_FP)
+		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Release|Windows Mobile 6 Professional SDK (ARMV4I).ActiveCfg = Release|STANDARDSDK_500 (ARMV4I)
+		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Release|Windows Mobile 6 Professional SDK (ARMV4I).Build.0 = Release|STANDARDSDK_500 (ARMV4I)
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Release|Windows Mobile 6 Standard SDK (ARMV4I).ActiveCfg = Release|STANDARDSDK_500 (MIPSIV_FP)
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Release|Windows Mobile 6.5.3 Professional DTK (ARMV4I).ActiveCfg = Release|STANDARDSDK_500 (MIPSIV_FP)
 		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Debug Settings|Any CPU.ActiveCfg = Debug Settings|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
