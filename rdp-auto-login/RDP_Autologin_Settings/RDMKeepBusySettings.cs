@@ -190,7 +190,8 @@ namespace RDP_Autologin_Settings
         }
         void writeInt(string sName, UInt32 iVal)
         {
-            rk.SetValue(sName, iVal, RegistryValueKind.DWord); //0xc14d0001
+            //stupid VS: http://stackoverflow.com/questions/6608400/how-to-put-a-dword-in-the-registry-with-the-highest-bit-set
+            rk.SetValue(sName, unchecked((int)iVal), RegistryValueKind.DWord); //0xc14d0001
         }
 
         int readIntFromDWORD(string sName)
