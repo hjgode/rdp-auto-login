@@ -30,7 +30,7 @@ static TCHAR	logFileNameW[MAX_PATH];
 static BOOL		bFirstFileCall = true;
 
 #if DEBUG
-	BOOL ncLogEnabled = TRUE;
+	BOOL ncLogEnabled = FALSE;
 #else
 	BOOL ncLogEnabled = FALSE;
 #endif

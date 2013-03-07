@@ -64,8 +64,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,6,0,1
- PRODUCTVERSION 1,6,0,1
+ FILEVERSION 1,7,0,0
+ PRODUCTVERSION 1,7,0,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -81,12 +81,12 @@ BEGIN
         BLOCK "040704b0"
         BEGIN
             VALUE "FileDescription", "RDM_keep Application"
-            VALUE "FileVersion", "1, 6, 0, 1"
+            VALUE "FileVersion", "1, 7, 0, 0"
             VALUE "InternalName", "RDM_keep"
             VALUE "LegalCopyright", "Copyright (C) 2013"
             VALUE "OriginalFilename", "RDM_keep.exe"
             VALUE "ProductName", "RDM_keep Application"
-            VALUE "ProductVersion", "1, 6, 0, 1"
+            VALUE "ProductVersion", "1, 7, 0, 0"
         END
     END
     BLOCK "VarFileInfo"
