@@ -2,6 +2,7 @@
 #pragma once
 
 //#define USEWINSOCK
+//#define USEFILELOG
 
 #include <windows.h>
 #ifdef USEWINSOCK
@@ -108,6 +109,9 @@ static int initFileNames()
 	//add txt extension
 	TCHAR txtFileName[MAX_PATH+1];
 	wsprintf(txtFileName, L"%s.log.txt", lpFileName1);
+
+#ifdef USEFILELOG
+
 	//store the filename to use in char and tchar
 	TCHAR logFileNameW[MAX_PATH];
 
@@ -142,6 +146,9 @@ static int initFileNames()
 	FILE	*fp;
 	fp = fopen(logFileName, "a+");
 	fclose(fp);
+
+#endif //USEFILELOG
+	
 	bFirstFileCall=false;
 	return 0;
 }
@@ -181,6 +188,7 @@ TCHAR* logDateTime(){
 }
 
 static int writefile(TCHAR *filetext){
+#ifdef USEFILELOG
 
 //	EnterCriticalSection(pCriticalAction);
 
@@ -217,6 +225,8 @@ static int writefile(TCHAR *filetext){
 	/* otherwise the file wont be created. */
 
 //	LeaveCriticalSection(pCriticalAction);
+
+#endif  //USEFILELOG
 
 	return 0;
 }
