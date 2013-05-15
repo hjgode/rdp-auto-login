@@ -770,7 +770,7 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 
 			TCHAR szTitle[MAX_PATH];
 			TCHAR* szSearch = L"Remote Desktop Mobile";
-			TCHAR* pFound;
+			TCHAR* pFound=NULL;
 			int pos;
 			//find if window text starts with text
 			HWND hwndTest = FindWindow(L"TSSHELLWND", NULL);
