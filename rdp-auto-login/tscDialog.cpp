@@ -64,6 +64,30 @@ typedef struct{
 	TCHAR	szValue[MAX_PATH];
 }myDlgItem;
 
+/*
+	For PPC2003
+
+	 ### ScanTSCwindow ### 
+	"Dialog"  "Terminal Services Client"	0x0
+	"static"  "Server:"	0xffff
+	"Edit"  "192.168.128.5"	0x28e
+	"static"  "Recent servers:"	0xffff
+	"listbox"  ""	0x294
+	"Button"  "Connect"	0x290
+	"Button"  "Limit size of server desktop to fit on this screen"	0x421
+*/
+
+#if _WIN32_WCE == 0x420
+myDlgItem myDlgItems[] = {
+	{L"Computer", 0x28e, L"192.168.0.5"}, //192.168.0.2
+	{L"Username", 0x3ef, L"rdesktop"},						//UNUSED
+	{L"Password", 0x3f0, L"rdesktop"},// L"Intermec+2004"},	//UNUSED
+	{L"Domain",   0x3f1, L""},								//UNUSED
+	{L"Limit size", 0x421, L"0"},
+	{L"Status", 0x410, L"connecting..."},					//UNUSED
+};
+#define COUNT_DLG_ITEMS 6
+#else
 myDlgItem myDlgItems[] = {
 	{L"Computer", 0x403, L"192.168.0.5"}, //192.168.0.2
 	{L"Username", 0x3ef, L"rdesktop"},
@@ -73,6 +97,27 @@ myDlgItem myDlgItems[] = {
 	{L"Status", 0x410, L"connecting..."},
 };
 #define COUNT_DLG_ITEMS 6
+#endif
+/*
+TSC dialog elements:
+	class		text		ctrlID
+	"Dialog"  ""	0x0
+	"static"  "Status:"	0x40e
+	"static"  "Not connected"	0x410		//status
+	
+	"combobox"  "192.168.0.2"	0x403		//Computer COMBO BOX!
+	"Edit"  "192.168.0.2"	0x3e9			//Computer
+	"sbedit"  "rdesktop"	0x3ef			//Username
+	"sbedit"  "Intermec+2004"	0x3f0		//Password
+	"sbedit"  ""	0x3f1					//Domain
+	"Button"  "Save password"	0x3f2		//scave pw option
+
+	"static"  "Computer:"	0x3f7
+	"static"  "User name:"	0x3f8
+	"static"  "Password:"	0x3f9
+	"static"  "Domain:"	0x3fa
+	"SIPPREF"  "SIP1"	0x41c
+*/
 
 //additional options
 BOOL g_bUseFullscreen=false;
@@ -680,12 +725,26 @@ int startRDM(){
 		//if tsc is already running, kill it
 
 		//first ensure TSSHELLWND is not minimized or connect will hang (why?)
+#if _WIN32_WCE == 0x420
+		HWND hwndTSC = FindWindow(L"UIMainClass", NULL);//FindWindow(NULL, L"Terminal Services Client");	
+		if(hwndTSC==NULL)
+			hwndTSC = FindWindow(NULL, L"Terminal Services Client");
+		//at start we see the 'connect' dialog
+		//in a connected session the class and title changes!
+#else
 		HWND hwndTSC = FindWindow(L"TSSHELLWND",NULL);
+#endif
+		DEBUGMSG(1, (L"TSC is running as window: 0x%08x\n",hwndTSC));
+
 		if(hwndTSC!=NULL)
 			ShowWindow(hwndTSC, SW_SHOWNORMAL);
-
+#if _WIN32_WCE == 0x420
+		if(IsProcessRunning(L"mstsc40.exe")){		//on pocketpc we have mstsc40.exe
+			if( KillExeWindow(L"mstsc40.exe") ){
+#else
 		if(IsProcessRunning(L"wpctsc.exe")){
 			if( KillExeWindow(L"wpctsc.exe") ){
+#endif
 				//killedit OK
 				Sleep(1000);
 			}
@@ -703,7 +762,11 @@ int startRDM(){
 		DWORD dProcIDTSC=0; //to save proc ID of TSC main window
 		//start a new instance of tsc
 		PROCESS_INFORMATION pi;
+#if _WIN32_WCE == 0x420
+		if (CreateProcess(L"\\windows\\mstsc40.exe", L"", NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi)!=0)
+#else
 		if (CreateProcess(L"\\windows\\wpctsc.exe", L"", NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi)!=0)
+#endif
 		{
 			//OK
 			Sleep(1000); //give some time to setup
@@ -718,22 +781,31 @@ int startRDM(){
 		}
 
 		//find the "Remote Desktop Mobile" dialog window
+#if _WIN32_WCE == 0x420
+		DWORD pidTSC = FindPID(L"mstsc40.exe");
+#else
 		DWORD pidTSC = FindPID(L"wpctsc.exe");
+#endif
 		HWND hTscDialog = getTscDialog(pidTSC);  //FindWindow(L"Dialog", NULL);
 
 		if(hTscDialog!=NULL){
 			//check if this is the right window
+#if _WIN32_WCE == 0x420
+			if(FindPID(L"mstsc40.exe") != 0){
+				if(FindPID(hTscDialog)!= FindPID(L"mstsc40.exe")){
+#else
 			if(FindPID(L"wpctsc.exe") != 0){
 				if(FindPID(hTscDialog)!= FindPID(L"wpctsc.exe")){
+#endif
 					iRet = -4; //error finding TSC dialog
 					continue;
 				}
 				else{
-					#ifdef DEBUG
+#ifdef DEBUG
 					DEBUGMSG(1, (L" ### ScanTSCwindow ### \r\n"));
 					scanTscWindow(hTscDialog); //scan TSC window and list child windows and CtrlIDs
 					DEBUGMSG(1, (L" --- ScanTSCwindow --- \r\n"));
-					#endif
+#endif
 					isOK=TRUE;
 					iRet=0;
 				}
@@ -769,6 +841,18 @@ TSC dialog elements:
 	"SIPPREF"  "SIP1"	0x41c
 */
 
+/*
+	For PPC2003
+
+	 ### ScanTSCwindow ### 
+	"Dialog"  "Terminal Services Client"	0x0
+	"static"  "Server:"	0xffff
+	"Edit"  "192.168.128.5"	0x28e
+	"static"  "Recent servers:"	0xffff
+	"listbox"  ""	0x294
+	"Button"  "Connect"	0x290
+	"Button"  "Limit size of server desktop to fit on this screen"	0x421
+*/
 //######################### Main Function ##############################
 
 

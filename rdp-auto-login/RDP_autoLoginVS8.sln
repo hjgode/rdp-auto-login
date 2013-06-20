@@ -19,6 +19,7 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Settings|Any CPU = Debug Settings|Any CPU
 		Debug Settings|Mixed Platforms = Debug Settings|Mixed Platforms
+		Debug Settings|Pocket PC 2003 (ARMV4) = Debug Settings|Pocket PC 2003 (ARMV4)
 		Debug Settings|STANDARDSDK_500 (ARMV4I) = Debug Settings|STANDARDSDK_500 (ARMV4I)
 		Debug Settings|STANDARDSDK_500 (MIPSII) = Debug Settings|STANDARDSDK_500 (MIPSII)
 		Debug Settings|STANDARDSDK_500 (MIPSII_FP) = Debug Settings|STANDARDSDK_500 (MIPSII_FP)
@@ -33,6 +34,7 @@ Global
 		Debug Settings|Windows Mobile 6.5.3 Professional DTK (ARMV4I) = Debug Settings|Windows Mobile 6.5.3 Professional DTK (ARMV4I)
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|Pocket PC 2003 (ARMV4) = Debug|Pocket PC 2003 (ARMV4)
 		Debug|STANDARDSDK_500 (ARMV4I) = Debug|STANDARDSDK_500 (ARMV4I)
 		Debug|STANDARDSDK_500 (MIPSII) = Debug|STANDARDSDK_500 (MIPSII)
 		Debug|STANDARDSDK_500 (MIPSII_FP) = Debug|STANDARDSDK_500 (MIPSII_FP)
@@ -47,6 +49,7 @@ Global
 		Debug|Windows Mobile 6.5.3 Professional DTK (ARMV4I) = Debug|Windows Mobile 6.5.3 Professional DTK (ARMV4I)
 		Release|Any CPU = Release|Any CPU
 		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|Pocket PC 2003 (ARMV4) = Release|Pocket PC 2003 (ARMV4)
 		Release|STANDARDSDK_500 (ARMV4I) = Release|STANDARDSDK_500 (ARMV4I)
 		Release|STANDARDSDK_500 (MIPSII) = Release|STANDARDSDK_500 (MIPSII)
 		Release|STANDARDSDK_500 (MIPSII_FP) = Release|STANDARDSDK_500 (MIPSII_FP)
@@ -65,6 +68,9 @@ Global
 		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Debug Settings|Mixed Platforms.ActiveCfg = Debug Settings|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Debug Settings|Mixed Platforms.Build.0 = Debug Settings|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Debug Settings|Mixed Platforms.Deploy.0 = Debug Settings|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
+		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Debug Settings|Pocket PC 2003 (ARMV4).ActiveCfg = Debug Settings|Pocket PC 2003 (ARMV4)
+		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Debug Settings|Pocket PC 2003 (ARMV4).Build.0 = Debug Settings|Pocket PC 2003 (ARMV4)
+		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Debug Settings|Pocket PC 2003 (ARMV4).Deploy.0 = Debug Settings|Pocket PC 2003 (ARMV4)
 		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Debug Settings|STANDARDSDK_500 (ARMV4I).ActiveCfg = Debug Settings|STANDARDSDK_500 (ARMV4I)
 		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Debug Settings|STANDARDSDK_500 (ARMV4I).Build.0 = Debug Settings|STANDARDSDK_500 (ARMV4I)
 		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Debug Settings|STANDARDSDK_500 (ARMV4I).Deploy.0 = Debug Settings|STANDARDSDK_500 (ARMV4I)
@@ -91,6 +97,9 @@ Global
 		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Debug|Mixed Platforms.ActiveCfg = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Debug|Mixed Platforms.Build.0 = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Debug|Mixed Platforms.Deploy.0 = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
+		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Debug|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Pocket PC 2003 (ARMV4)
+		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Debug|Pocket PC 2003 (ARMV4).Build.0 = Debug|Pocket PC 2003 (ARMV4)
+		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Debug|Pocket PC 2003 (ARMV4).Deploy.0 = Debug|Pocket PC 2003 (ARMV4)
 		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Debug|STANDARDSDK_500 (ARMV4I).ActiveCfg = Debug|STANDARDSDK_500 (ARMV4I)
 		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Debug|STANDARDSDK_500 (ARMV4I).Build.0 = Debug|STANDARDSDK_500 (ARMV4I)
 		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Debug|STANDARDSDK_500 (ARMV4I).Deploy.0 = Debug|STANDARDSDK_500 (ARMV4I)
@@ -117,6 +126,9 @@ Global
 		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Release|Mixed Platforms.ActiveCfg = Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I)
 		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Release|Mixed Platforms.Build.0 = Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I)
 		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Release|Mixed Platforms.Deploy.0 = Release|Windows Mobile 5.0 Pocket PC SDK (ARMV4I)
+		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Release|Pocket PC 2003 (ARMV4).ActiveCfg = Release|Pocket PC 2003 (ARMV4)
+		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Release|Pocket PC 2003 (ARMV4).Build.0 = Release|Pocket PC 2003 (ARMV4)
+		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Release|Pocket PC 2003 (ARMV4).Deploy.0 = Release|Pocket PC 2003 (ARMV4)
 		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Release|STANDARDSDK_500 (ARMV4I).ActiveCfg = Release|STANDARDSDK_500 (ARMV4I)
 		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Release|STANDARDSDK_500 (ARMV4I).Build.0 = Release|STANDARDSDK_500 (ARMV4I)
 		{8E93CA43-CA16-44D7-B042-B48461C0F83F}.Release|STANDARDSDK_500 (ARMV4I).Deploy.0 = Release|STANDARDSDK_500 (ARMV4I)
@@ -144,6 +156,7 @@ Global
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Debug Settings|Mixed Platforms.ActiveCfg = Debug Settings|Any CPU
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Debug Settings|Mixed Platforms.Build.0 = Debug Settings|Any CPU
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Debug Settings|Mixed Platforms.Deploy.0 = Debug Settings|Any CPU
+		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Debug Settings|Pocket PC 2003 (ARMV4).ActiveCfg = Debug Settings|Any CPU
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Debug Settings|STANDARDSDK_500 (ARMV4I).ActiveCfg = Debug Settings|Any CPU
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Debug Settings|STANDARDSDK_500 (MIPSII).ActiveCfg = Debug Settings|Any CPU
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Debug Settings|STANDARDSDK_500 (MIPSII_FP).ActiveCfg = Debug Settings|Any CPU
@@ -162,6 +175,9 @@ Global
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Debug|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Debug|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Any CPU
+		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Debug|Pocket PC 2003 (ARMV4).Build.0 = Debug|Any CPU
+		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Debug|Pocket PC 2003 (ARMV4).Deploy.0 = Debug|Any CPU
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Debug|STANDARDSDK_500 (ARMV4I).ActiveCfg = Debug|Any CPU
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Debug|STANDARDSDK_500 (MIPSII).ActiveCfg = Debug|Any CPU
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Debug|STANDARDSDK_500 (MIPSII_FP).ActiveCfg = Debug|Any CPU
@@ -182,6 +198,7 @@ Global
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU
+		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Release|Pocket PC 2003 (ARMV4).ActiveCfg = Release|Any CPU
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Release|STANDARDSDK_500 (ARMV4I).ActiveCfg = Release|Any CPU
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Release|STANDARDSDK_500 (MIPSII).ActiveCfg = Release|Any CPU
 		{9927BE0B-E1E9-4B95-BA3A-F085CDC46372}.Release|STANDARDSDK_500 (MIPSII_FP).ActiveCfg = Release|Any CPU
@@ -201,6 +218,9 @@ Global
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug Settings|Mixed Platforms.ActiveCfg = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug Settings|Mixed Platforms.Build.0 = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug Settings|Mixed Platforms.Deploy.0 = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
+		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug Settings|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Pocket PC 2003 (ARMV4)
+		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug Settings|Pocket PC 2003 (ARMV4).Build.0 = Debug|Pocket PC 2003 (ARMV4)
+		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug Settings|Pocket PC 2003 (ARMV4).Deploy.0 = Debug|Pocket PC 2003 (ARMV4)
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug Settings|STANDARDSDK_500 (ARMV4I).ActiveCfg = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug Settings|STANDARDSDK_500 (MIPSII).ActiveCfg = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug Settings|STANDARDSDK_500 (MIPSII_FP).ActiveCfg = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
@@ -219,6 +239,9 @@ Global
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|Mixed Platforms.ActiveCfg = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|Mixed Platforms.Build.0 = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|Mixed Platforms.Deploy.0 = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
+		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Pocket PC 2003 (ARMV4)
+		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|Pocket PC 2003 (ARMV4).Build.0 = Debug|Pocket PC 2003 (ARMV4)
+		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|Pocket PC 2003 (ARMV4).Deploy.0 = Debug|Pocket PC 2003 (ARMV4)
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|STANDARDSDK_500 (ARMV4I).ActiveCfg = Debug|STANDARDSDK_500 (ARMV4I)
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|STANDARDSDK_500 (ARMV4I).Build.0 = Debug|STANDARDSDK_500 (ARMV4I)
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|STANDARDSDK_500 (ARMV4I).Deploy.0 = Debug|STANDARDSDK_500 (ARMV4I)
@@ -234,9 +257,9 @@ Global
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I).ActiveCfg = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I).Build.0 = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I).Deploy.0 = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
-		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|Windows Mobile 6 Professional SDK (ARMV4I).ActiveCfg = Debug|Windows Mobile 6 Professional SDK (ARMV4I)
-		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|Windows Mobile 6 Professional SDK (ARMV4I).Build.0 = Debug|Windows Mobile 6 Professional SDK (ARMV4I)
-		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|Windows Mobile 6 Professional SDK (ARMV4I).Deploy.0 = Debug|Windows Mobile 6 Professional SDK (ARMV4I)
+		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|Windows Mobile 6 Professional SDK (ARMV4I).ActiveCfg = Debug|Pocket PC 2003 (ARMV4)
+		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|Windows Mobile 6 Professional SDK (ARMV4I).Build.0 = Debug|Pocket PC 2003 (ARMV4)
+		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|Windows Mobile 6 Professional SDK (ARMV4I).Deploy.0 = Debug|Pocket PC 2003 (ARMV4)
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|Windows Mobile 6 Standard SDK (ARMV4I).ActiveCfg = Debug|Windows Mobile 6 Standard SDK (ARMV4I)
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|Windows Mobile 6 Standard SDK (ARMV4I).Build.0 = Debug|Windows Mobile 6 Standard SDK (ARMV4I)
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Debug|Windows Mobile 6 Standard SDK (ARMV4I).Deploy.0 = Debug|Windows Mobile 6 Standard SDK (ARMV4I)
@@ -247,6 +270,9 @@ Global
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Release|Mixed Platforms.ActiveCfg = Release|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Release|Mixed Platforms.Build.0 = Release|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Release|Mixed Platforms.Deploy.0 = Release|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
+		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Release|Pocket PC 2003 (ARMV4).ActiveCfg = Release|Pocket PC 2003 (ARMV4)
+		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Release|Pocket PC 2003 (ARMV4).Build.0 = Release|Pocket PC 2003 (ARMV4)
+		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Release|Pocket PC 2003 (ARMV4).Deploy.0 = Release|Pocket PC 2003 (ARMV4)
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Release|STANDARDSDK_500 (ARMV4I).ActiveCfg = Release|STANDARDSDK_500 (ARMV4I)
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Release|STANDARDSDK_500 (ARMV4I).Build.0 = Release|STANDARDSDK_500 (ARMV4I)
 		{800E63EC-AA45-4A73-8F97-5F2F317AA9B0}.Release|STANDARDSDK_500 (ARMV4I).Deploy.0 = Release|STANDARDSDK_500 (ARMV4I)
@@ -273,6 +299,9 @@ Global
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Debug Settings|Mixed Platforms.ActiveCfg = Debug|STANDARDSDK_500 (MIPSIV_FP)
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Debug Settings|Mixed Platforms.Build.0 = Debug|STANDARDSDK_500 (MIPSIV_FP)
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Debug Settings|Mixed Platforms.Deploy.0 = Debug|STANDARDSDK_500 (MIPSIV_FP)
+		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Debug Settings|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Pocket PC 2003 (ARMV4)
+		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Debug Settings|Pocket PC 2003 (ARMV4).Build.0 = Debug|Pocket PC 2003 (ARMV4)
+		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Debug Settings|Pocket PC 2003 (ARMV4).Deploy.0 = Debug|Pocket PC 2003 (ARMV4)
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Debug Settings|STANDARDSDK_500 (ARMV4I).ActiveCfg = Debug|STANDARDSDK_500 (MIPSIV_FP)
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Debug Settings|STANDARDSDK_500 (MIPSII).ActiveCfg = Debug|STANDARDSDK_500 (MIPSIV_FP)
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Debug Settings|STANDARDSDK_500 (MIPSII_FP).ActiveCfg = Debug|STANDARDSDK_500 (MIPSIV_FP)
@@ -291,6 +320,9 @@ Global
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Debug|Mixed Platforms.ActiveCfg = Debug|STANDARDSDK_500 (MIPSIV_FP)
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Debug|Mixed Platforms.Build.0 = Debug|STANDARDSDK_500 (MIPSIV_FP)
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Debug|Mixed Platforms.Deploy.0 = Debug|STANDARDSDK_500 (MIPSIV_FP)
+		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Debug|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Pocket PC 2003 (ARMV4)
+		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Debug|Pocket PC 2003 (ARMV4).Build.0 = Debug|Pocket PC 2003 (ARMV4)
+		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Debug|Pocket PC 2003 (ARMV4).Deploy.0 = Debug|Pocket PC 2003 (ARMV4)
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Debug|STANDARDSDK_500 (ARMV4I).ActiveCfg = Debug|STANDARDSDK_500 (ARMV4I)
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Debug|STANDARDSDK_500 (ARMV4I).Build.0 = Debug|STANDARDSDK_500 (ARMV4I)
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Debug|STANDARDSDK_500 (ARMV4I).Deploy.0 = Debug|STANDARDSDK_500 (ARMV4I)
@@ -323,6 +355,9 @@ Global
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Release|Mixed Platforms.ActiveCfg = Release|STANDARDSDK_500 (MIPSIV_FP)
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Release|Mixed Platforms.Build.0 = Release|STANDARDSDK_500 (MIPSIV_FP)
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Release|Mixed Platforms.Deploy.0 = Release|STANDARDSDK_500 (MIPSIV_FP)
+		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Release|Pocket PC 2003 (ARMV4).ActiveCfg = Release|Pocket PC 2003 (ARMV4)
+		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Release|Pocket PC 2003 (ARMV4).Build.0 = Release|Pocket PC 2003 (ARMV4)
+		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Release|Pocket PC 2003 (ARMV4).Deploy.0 = Release|Pocket PC 2003 (ARMV4)
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Release|STANDARDSDK_500 (ARMV4I).ActiveCfg = Release|STANDARDSDK_500 (ARMV4I)
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Release|STANDARDSDK_500 (ARMV4I).Build.0 = Release|STANDARDSDK_500 (ARMV4I)
 		{34F48150-2C4B-4960-9D86-06BBBF0D32F5}.Release|STANDARDSDK_500 (ARMV4I).Deploy.0 = Release|STANDARDSDK_500 (ARMV4I)
@@ -354,6 +389,7 @@ Global
 		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Debug Settings|Mixed Platforms.ActiveCfg = Debug Settings|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Debug Settings|Mixed Platforms.Build.0 = Debug Settings|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Debug Settings|Mixed Platforms.Deploy.0 = Debug Settings|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
+		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Debug Settings|Pocket PC 2003 (ARMV4).ActiveCfg = Debug Settings|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Debug Settings|STANDARDSDK_500 (ARMV4I).ActiveCfg = Debug Settings|STANDARDSDK_500 (ARMV4I)
 		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Debug Settings|STANDARDSDK_500 (ARMV4I).Build.0 = Debug Settings|STANDARDSDK_500 (ARMV4I)
 		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Debug Settings|STANDARDSDK_500 (ARMV4I).Deploy.0 = Debug Settings|STANDARDSDK_500 (ARMV4I)
@@ -382,6 +418,8 @@ Global
 		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Debug|Mixed Platforms.ActiveCfg = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Debug|Mixed Platforms.Build.0 = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Debug|Mixed Platforms.Deploy.0 = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
+		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Debug|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
+		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Debug|Pocket PC 2003 (ARMV4).Build.0 = Debug|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Debug|STANDARDSDK_500 (ARMV4I).ActiveCfg = Debug|STANDARDSDK_500 (ARMV4I)
 		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Debug|STANDARDSDK_500 (ARMV4I).Build.0 = Debug|STANDARDSDK_500 (ARMV4I)
 		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Debug|STANDARDSDK_500 (ARMV4I).Deploy.0 = Debug|STANDARDSDK_500 (ARMV4I)
@@ -408,6 +446,7 @@ Global
 		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Release|Mixed Platforms.ActiveCfg = Release|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Release|Mixed Platforms.Build.0 = Release|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Release|Mixed Platforms.Deploy.0 = Release|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
+		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Release|Pocket PC 2003 (ARMV4).ActiveCfg = Release|Windows Mobile 5.0 Smartphone SDK (ARMV4I)
 		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Release|STANDARDSDK_500 (ARMV4I).ActiveCfg = Release|STANDARDSDK_500 (ARMV4I)
 		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Release|STANDARDSDK_500 (ARMV4I).Build.0 = Release|STANDARDSDK_500 (ARMV4I)
 		{3A152083-BDFC-402B-A8AC-DBEF9819D05A}.Release|STANDARDSDK_500 (ARMV4I).Deploy.0 = Release|STANDARDSDK_500 (ARMV4I)
