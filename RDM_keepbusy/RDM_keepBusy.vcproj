@@ -718,7 +718,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/subsystem:$(CESubsystem) /MACHINE:THUMB "
+				AdditionalOptions="/subsystem:$(CESubsystem) /MACHINE:ARM"
 				AdditionalDependencies="commctrl.lib coredll.lib"
 				OutputFile="$(PlatformName)\$(ConfigurationName)/RDM_keepBusy.exe"
 				LinkIncremental="2"
@@ -1470,7 +1470,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/subsystem:$(CESubsystem) /MACHINE:THUMB "
+				AdditionalOptions="/subsystem:$(CESubsystem) /MACHINE:ARM"
 				AdditionalDependencies="commctrl.lib coredll.lib"
 				OutputFile="$(PlatformName)\$(ConfigurationName)/RDM_keepBusy.exe"
 				LinkIncremental="1"
