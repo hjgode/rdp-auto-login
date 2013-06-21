@@ -330,7 +330,34 @@ HWND findWindowByClass(HWND hWndStart, TCHAR* szClass){
 	return hFoundHWND;
 }
 
+HWND getMSTSChandle(){	//for use with PPC2003 Terminal Service Client
+/*
+	window text (window class)
+	"192.168.128.5 - Terminal Services Client" (UIMainClass)	// top level window: FindWindow
+		+	"<No name>"	UIContainerClass						// child window to UIMainClass
+			+	"Input Capture Window" (IHWindowClass)			// child window to TerminalServerClient
+*/
+	//find the "Input Capture Window" child Window
+	//Find the top levvel window
+	HWND hWndRDM = FindWindow(_T("UIMainClass"), NULL);
+
+	//init find vars moved from being static inside findWindow() and findWindowByClass(), v15.01.2013
+	bFoundWindow=FALSE;
+	bFoundClass=FALSE;
+	hFoundHWND=NULL;
+	hFoundHWNDClass=NULL;
+	HWND hTSCWND = findWindow(hWndRDM, L"Input Capture Window");
+	if(hTSCWND)
+		DEBUGMSG(1, (L"getTSChandle(): Found Input Capture Window, Handle=0x%0x\n", hTSCWND));
+	else
+		DEBUGMSG(1, (L"getTSChandle(): No Input Capture Windowfound\n"));
+	return hTSCWND;
+}
+
 HWND getTSChandle(){
+#if _WIN32_WCE == 0x420
+	return getMSTSChandle();		//use alternative window for PPC2003
+#endif
 /*
 	window text (window class)
 	"192.168.0.2 - Remote Desktop Mobile" (TSSHELLWND)					// top level window: FindWindow
@@ -719,8 +746,12 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 			//Firstly launch RDP Client
 			SHELLEXECUTEINFO sei = {0};
 			sei.cbSize = sizeof(sei);
-			sei.nShow = SW_SHOWNORMAL; 
+			sei.nShow = SW_SHOWNORMAL;
+#if _WIN32_WCE == 0x420
+			sei.lpFile = TEXT("\\Windows\\mstsc40.exe");
+#else
 			sei.lpFile = TEXT("\\Windows\\wpctsc.exe");
+#endif
 			sei.lpParameters = TEXT(" ");
 			if (!ShellExecuteEx(&sei))
 			{
@@ -769,41 +800,46 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 			EnterCriticalSection(&myCriticalSection);
 
 			TCHAR szTitle[MAX_PATH];
-			TCHAR* szSearch = L"Remote Desktop Mobile";
 			TCHAR* pFound=NULL;
 			int pos;
 			//find if window text starts with text
+#if _WIN32_WCE == 0x420
+			TCHAR* szSearch = L"Terminal Services Client";
+			HWND hwndTest = FindWindow(L"UIMainClass", NULL);
+#else
+			TCHAR* szSearch = L"Remote Desktop Mobile";
 			HWND hwndTest = FindWindow(L"TSSHELLWND", NULL);
+#endif
 			if(hwndTest!=NULL){
 				nclog(L"check for TSSHELLWND is active\n");
 				GetWindowText(hwndTest, szTitle, MAX_PATH);
 				pFound=wcsstr(szTitle, szSearch);
 				if(pFound!=NULL){
 					if(bUseLogging)
-						nclog(L"Found 'Remote Desktop Mobile' in title\n");
+						nclog(L"Found 'Remote Desktop Mobile/Terminal Services Client' in title\n");
 					pos=(int)(pFound-szTitle + 1);
 					if(pos==1) //the window text starts with "Remote Desktop Mobile"
 					{
 						if(bUseLogging)
-							nclog(L"'Remote Desktop Mobile' is idle\n");
+							nclog(L"'Remote Desktop Mobile/Terminal Services Client' is idle\n");
 						g_dwStatus=idle;
 					}
 					else
 					{
 						if(bUseLogging)
-							nclog(L"'Remote Desktop Mobile' is active\n");
+							nclog(L"'Remote Desktop Mobile/Terminal Services Client' is active\n");
 						g_dwStatus=active;
 					}
 				}
 				else{
 					if(bUseLogging)
-						nclog(L"'Remote Desktop Mobile' is not active\n");
+						nclog(L"'Remote Desktop Mobile/Terminal Services Client' is not active\n");
 					g_dwStatus=inactive;
 				}
 			}
 			else{
 				if(bUseLogging)
-					nclog(L"'Remote Desktop Mobile' is not found\n");
+					nclog(L"'Remote Desktop Mobile/Terminal Services Client' is not found\n");
 				g_dwStatus=notfound;
 			}
 

@@ -79,17 +79,18 @@ typedef struct{
 
 #if _WIN32_WCE == 0x420
 myDlgItem myDlgItems[] = {
-	{L"Computer", 0x28e, L"192.168.0.5"}, //192.168.0.2
-	{L"Username", 0x3ef, L"rdesktop"},						//UNUSED
-	{L"Password", 0x3f0, L"rdesktop"},// L"Intermec+2004"},	//UNUSED
-	{L"Domain",   0x3f1, L""},								//UNUSED
+	{L"Computer", 0x28e, L"192.168.128.5"}, //192.168.0.2
+//	{L"Username", 0x3ef, L"rdesktop"},						//UNUSED
+//	{L"Password", 0x3f0, L"rdesktop"},// L"Intermec+2004"},	//UNUSED
+//	{L"Domain",   0x3f1, L""},								//UNUSED
 	{L"Limit size", 0x421, L"0"},
-	{L"Status", 0x410, L"connecting..."},					//UNUSED
+//	{L"Status", 0x410, L"connecting..."},					//UNUSED
+	{L"Button",	  0x290, L"Connect" },
 };
-#define COUNT_DLG_ITEMS 6
+#define COUNT_DLG_ITEMS 2
 #else
 myDlgItem myDlgItems[] = {
-	{L"Computer", 0x403, L"192.168.0.5"}, //192.168.0.2
+	{L"Computer", 0x403, L"192.168.128.5"}, //192.168.0.2
 	{L"Username", 0x3ef, L"rdesktop"},
 	{L"Password", 0x3f0, L"rdesktop"},// L"Intermec+2004"},
 	{L"Domain",   0x3f1, L""},
@@ -165,8 +166,11 @@ void writeRDP(){
 		int c=1;
 		do{
 			//extra processing
-			//Fullscreen?
-			//desktop size
+#if _WIN32_WCE == 0x420
+			//PPC2003 does not support UserName etc...
+			if(wcsstr(rdpLines[c].line, L"ServerName")!=NULL)
+				wsprintf(szTemp, rdpLines[c].line, myDlgItems[0].szValue);	//at idx 0 we have the servername in myDlgItems[]
+#else
 			if(wcsstr(rdpLines[c].line, L"UserName")!=NULL)
 				wsprintf(szTemp, rdpLines[c].line, myDlgItems[1].szValue);
 			else if(wcsstr(rdpLines[c].line, L"Domain")!=NULL)
@@ -175,7 +179,7 @@ void writeRDP(){
 				wsprintf(szTemp, rdpLines[c].line, myDlgItems[0].szValue);
 			else if(wcsstr(rdpLines[c].line, L"SavePassword")!=NULL)
 				wsprintf(szTemp, rdpLines[c].line, myDlgItems[4].szValue);
-
+#endif
 			else if(wcsstr(rdpLines[c].line, L"DesktopHeight")!=NULL)
 
 				if(g_bUseFitToScreen)   //3=FullScreen or 1=normal
@@ -218,7 +222,7 @@ void writeRDP(){
 																			 //2=Disable sound redirection; do not play sounds at the server
 			}
 			else
-				wsprintf(szTemp, rdpLines[c].line);
+				wsprintf(szTemp, rdpLines[c].line, L"");
 
 			//write line by line
 			str_length = wcslen(szTemp) * sizeof(TCHAR); //unicode!
@@ -891,7 +895,22 @@ int startTSC()
 		SendDlgItemMessage(hTscDialog, 0x3f1, WM_SETTEXT, 0, (LPARAM)(LPCTSTR) strText);
 		Sleep(500);
 		UpdateWindow(hTscDialog);
-
+#if _WIN32_WCE == 0x420
+		//fill in the server
+		setDlgText(hTscDialog, myDlgItems[0].szValue, myDlgItems[0].dwCtrlID);
+		//use fit to screen?
+		if(g_bUseFitToScreen){
+			if(wcscmp(myDlgItems[1].szValue, L"1")==0){
+				lRes = SendMessage(GetDlgItem(hTscDialog, myDlgItems[1].dwCtrlID), BM_SETCHECK, BST_CHECKED, 0);
+				DEBUGMSG(1, (L"Changing: '%s', lRes=0x%0x\n",myDlgItems[1].szLabel, lRes));
+			}
+		}
+		else{
+			//uncheck "Limit size of server desktop to fit on this screen
+			lRes = SendMessage(GetDlgItem(hTscDialog, myDlgItems[1].dwCtrlID), BM_SETCHECK, BST_UNCHECKED, 0);
+			DEBUGMSG(1, (L"Changing: '%s', lRes=0x%0x\n",myDlgItems[1].szLabel, lRes));
+		}
+#else
 		for (int i=0; i < COUNT_DLG_ITEMS; i++){
 
 			if(i!=4){ //special handling or the checkbox
@@ -916,7 +935,7 @@ int startTSC()
 			EnableWindow(GetDlgItem(hTscDialog, myDlgItems[i].dwCtrlID), FALSE);
 			Sleep(500);
 		}
-
+#endif
 		//SetForegroundWindow(hTscDialog);
 
 		Sleep(300);
@@ -929,7 +948,11 @@ int startTSC()
 		//Sleep(10);
 		//SendMessage(GetDesktopWindow(), WM_KEYUP, VK_F1, 0);
 
-
+#if _WIN32_WCE == 0x420
+		//we can use the connect button to connect
+		HWND hwndButton = GetDlgItem(hTscDialog, myDlgItems[2].dwCtrlID);
+		SendMessage(hwndButton, BM_CLICK, 0, 0);
+#else
 		if(bUseMouseClick){
 			//Solution two with mouse_event, click at 13,306. The 13 comes from the assumption that hight of
 			//menu bar is 26 pixel and I want to click in the mid
@@ -963,6 +986,7 @@ int startTSC()
 			keybd_event(VK_F1, 0x70, KEYEVENTF_KEYUP, 0);
 
 		}//bUseMouseClick
+#endif
 /*
 		//test with WM_LBUTTONDOWN, did not work
 		HWND hClickWnd = FindWindow(L"TSSHELLWND", NULL);
