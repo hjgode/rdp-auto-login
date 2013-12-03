@@ -6,6 +6,12 @@ typedef struct{
 
 rdpLine rdpLines[] = {
 	{L"\xFF\xFE"}, //this is NOT used, it is the Unicode identifier
+	//new with 3. dec 2013
+	{L"WorkingDir:s:C:\\Program Files (x86)"},	// NOT IMPLEMENTED IN RDM!
+	{L"AlternateShell:s:C:\\Program Files (x86)\\notepad.exe"},	// NOT IMPLEMENTED IN RDM!
+	{L"EnableClipboardRedirection:i:%s"},	//0 = disabled, 1 = enable clipboard sharing, see also g_bEnableClipboardRedirection
+	{L"RDPIdleTimeout:i:0"},				// NOT IMPLEMENTED IN RDM!
+	//older...
 	{L"Domain:s:%s\r\n"},
 	{L"GrabFocusOnConnect:i:0\r\n"},
 	{L"MinutesToIdleTimeout:i:0\r\n"}, //was 5, has no function, tested with 0 but session did timeout anyway
