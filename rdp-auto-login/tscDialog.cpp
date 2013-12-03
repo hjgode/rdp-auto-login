@@ -123,6 +123,7 @@ TSC dialog elements:
 //additional options
 BOOL g_bUseFullscreen=false;
 BOOL g_bUseFitToScreen=false;
+BOOL g_bEnableClipboardRedirection=true;
 
 BOOL getScreenSize(){
 	int iScreenX = GetSystemMetrics(SM_CXSCREEN);
@@ -180,6 +181,12 @@ void writeRDP(){
 			else if(wcsstr(rdpLines[c].line, L"SavePassword")!=NULL)
 				wsprintf(szTemp, rdpLines[c].line, myDlgItems[4].szValue);
 #endif
+			else if(wcsstr(rdpLines[c].line, L"EnableClipboardRedirection")!=NULL)
+				if(g_bEnableClipboardRedirection)
+					wsprintf(szTemp, rdpLines[c].line, L"1");
+				else
+					wsprintf(szTemp, rdpLines[c].line, L"0");
+
 			else if(wcsstr(rdpLines[c].line, L"DesktopHeight")!=NULL)
 
 				if(g_bUseFitToScreen)   //3=FullScreen or 1=normal
