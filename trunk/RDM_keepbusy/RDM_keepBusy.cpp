@@ -4,6 +4,13 @@
 #include "stdafx.h"
 
 BOOL bUseLogging=FALSE;
+#if bUseLogging
+	#pragma comment (exestr, "with logging")
+	#pragma message ("### compiled with logging ###")
+#else
+	#pragma comment (exestr, "no logging")
+	#pragma message ("### compiled without logging ###")
+#endif
 
 #define TEST
 #undef TEST
