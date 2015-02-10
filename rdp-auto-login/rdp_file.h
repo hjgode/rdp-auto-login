@@ -20,9 +20,9 @@ rdpLine rdpLines[] = {
 	{L"EnablePrinterRedirection:i:0\r\n"},
 	{L"EnableSCardRedirection:i:1\r\n"},
 	{L"AutoReconnectEnabled:i:1\r\n"},
-	{L"EnableDriveRedirection:i:0\r\n"},	//EnableDriveRedirection=1, enables access to local files inside the host session
+	{L"EnableDriveRedirection:i:%i\r\n"},	//EnableDriveRedirection=1, enables access to local files inside the host session
 	{L"EnablePortRedirection:i:0\r\n"},
-	{L"AudioRedirectionMode:i:2\r\n"},		//0=Redirect sounds to the client, 1=Play sounds at the remote computer, 2=Disable sound redirection; do not play sounds at the server
+	{L"AudioRedirectionMode:i:%i\r\n"},		//0=Redirect sounds to the client, 1=Play sounds at the remote computer, 2=Disable sound redirection; do not play sounds at the server
 	{L"BitmapPersistenceEnabled:i:0\r\n"},
 	{L"BBarShowPinBtn:i:0\r\n"},
 	{L"Compress:i:1\r\n"},
