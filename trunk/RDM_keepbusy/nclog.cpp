@@ -2,7 +2,7 @@
 #pragma once
 
 //#define USEWINSOCK
-//#define USEFILELOG
+#define USEFILELOG
 
 #include <windows.h>
 #ifdef USEWINSOCK

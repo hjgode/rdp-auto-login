@@ -16,4 +16,5 @@ REGEDIT4
 "lParam21"=dword:014B0001
 "lParam12"=dword:C14D0001
 "lParam11"=dword:014D0001
+"doLogging"=dword:00000000
 
