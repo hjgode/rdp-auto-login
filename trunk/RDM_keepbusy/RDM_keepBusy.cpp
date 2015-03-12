@@ -708,6 +708,9 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 
 	int iCounter=0;
 	
+	//read reg
+	readReg();
+
 	//allow only one instance
 	if(bUseLogging)
 		nclog(L"CreateMutex...");
@@ -781,8 +784,6 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 		}
 	}
 
-	//read reg
-	readReg();
 
 	//get current color for restore
 	COLORREF _colorOrg = getColor();
