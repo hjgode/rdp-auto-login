@@ -111,8 +111,13 @@ int writeReg(){
 	}
 	DWORD dwType = REG_DWORD;
 	DWORD dwSize = sizeof(DWORD);
+	DWORD dwData = 0;
 
-	DWORD dwData = drawPointX;
+	dwData = bUseLogging; dwSize = sizeof(DWORD);
+	if( lRes = RegSetValueEx (hKey, L"doLogging", 0, dwType, (BYTE*) &dwData, dwSize) != ERROR_SUCCESS)
+		return lRes;
+
+	dwData = drawPointX;
 	if( lRes = RegSetValueEx (hKey, L"lineX", 0, dwType, (BYTE*) &dwData, dwSize) != ERROR_SUCCESS)
 		return lRes;
 	
@@ -167,12 +172,14 @@ int writeReg(){
 	dwData = _dwSLEEPTIME / 1000; dwSize = sizeof(DWORD);
 	if( lRes = RegSetValueEx (hKey, L"sleepTime", 0, dwType, (BYTE*) &dwData, dwSize) != ERROR_SUCCESS)
 		return lRes;
+	
 
 	RegCloseKey(hKey);
 	return lRes;
 }
 
 int readReg(){
+	//added defaults instead of return error code
 	int iRet=0;
 	HKEY hKey;
 	LRESULT lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"Software\\RDMKeepbusy", 0, KEY_ALL_ACCESS, &hKey); 
@@ -183,90 +190,91 @@ int readReg(){
 
 	dwSize=sizeof(DWORD); dwType=REG_DWORD;
 	lRes = RegQueryValueEx(hKey, L"lineX", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
-	if(lRes!=ERROR_SUCCESS)
-		return -51;
-	drawPointX=dwData;
+	if(lRes==ERROR_SUCCESS)
+		drawPointX=dwData;
 
 	dwSize=sizeof(DWORD); dwType=REG_DWORD;
 	lRes = RegQueryValueEx(hKey, L"lineY", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
-	if(lRes!=ERROR_SUCCESS)
-		return -52;
-	drawPointY=dwData;
+	if(lRes==ERROR_SUCCESS)
+		drawPointY=dwData;
 
 	dwSize=sizeof(DWORD); dwType=REG_DWORD;
 	lRes = RegQueryValueEx(hKey, L"lineLen", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
-	if(lRes!=ERROR_SUCCESS)
-		return -53;
-	lineLength=dwData;
+	if(lRes==ERROR_SUCCESS)
+		lineLength=dwData;
 
 	dwSize=sizeof(DWORD); dwType=REG_DWORD;
 	lRes = RegQueryValueEx(hKey, L"lineWidth", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
-	if(lRes!=ERROR_SUCCESS)
-		return -54;
-	lineHeight=dwData;
+	if(lRes==ERROR_SUCCESS)
+		lineHeight=dwData;
 
 	dwSize=sizeof(DWORD); dwType=REG_DWORD;
 	lRes = RegQueryValueEx(hKey, L"Key1", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
-	if(lRes!=ERROR_SUCCESS)
-		return -11;
-	_dwKey1=dwData;
+	if(lRes==ERROR_SUCCESS)
+	{	//if key is not defined, we will not get here
+		_dwKey1=dwData;
 
-	dwSize=sizeof(DWORD); dwType=REG_DWORD;
-	lRes = RegQueryValueEx(hKey, L"lParam11", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
-	if(lRes!=ERROR_SUCCESS)
-		return -12;
-	_dwLPARAM11=dwData;
+		dwSize=sizeof(DWORD); dwType=REG_DWORD;
+		lRes = RegQueryValueEx(hKey, L"lParam11", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
+		if(lRes==ERROR_SUCCESS)
+			_dwLPARAM11=dwData;
 
-	dwSize=sizeof(DWORD); dwType=REG_DWORD;
-	lRes = RegQueryValueEx(hKey, L"lParam12", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
-	if(lRes!=ERROR_SUCCESS)
-		return -13;
-	_dwLPARAM12=dwData;
+		dwSize=sizeof(DWORD); dwType=REG_DWORD;
+		lRes = RegQueryValueEx(hKey, L"lParam12", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
+		if(lRes==ERROR_SUCCESS)
+			_dwLPARAM12=dwData;
+	}
 
 	dwSize=sizeof(DWORD); dwType = REG_DWORD;
 	lRes = RegQueryValueEx(hKey, L"Key2", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
-	if(lRes!=ERROR_SUCCESS)
-		return -21;
-	_dwKey2=dwData;
+	if(lRes==ERROR_SUCCESS)
+	{
+		_dwKey2=dwData;
 
-	dwSize=sizeof(DWORD); dwType=REG_DWORD;
-	lRes = RegQueryValueEx(hKey, L"lParam21", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
-	if(lRes!=ERROR_SUCCESS)
-		return -22;
-	_dwLPARAM21=dwData;
+		dwSize=sizeof(DWORD); dwType=REG_DWORD;
+		lRes = RegQueryValueEx(hKey, L"lParam21", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
+		if(lRes==ERROR_SUCCESS)
+			_dwLPARAM21=dwData;
 
-	dwSize=sizeof(DWORD); dwType=REG_DWORD;
-	lRes = RegQueryValueEx(hKey, L"lParam22", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
-	if(lRes!=ERROR_SUCCESS)
-		return -23;
-	_dwLPARAM22=dwData;
+		dwSize=sizeof(DWORD); dwType=REG_DWORD;
+		lRes = RegQueryValueEx(hKey, L"lParam22", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
+		if(lRes==ERROR_SUCCESS)
+			_dwLPARAM22=dwData;
+	}
 
 	lRes = RegQueryValueEx(hKey, L"useMouse", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
-	if(lRes!=ERROR_SUCCESS)
-		return -31;
-	if(dwData==1)
-		_dwUseMouse=1;
-	else
-		_dwUseMouse=0;
+	if(lRes==ERROR_SUCCESS)
+	{
+		if(dwData==1)
+			_dwUseMouse=1;
+		else
+			_dwUseMouse=0;
 
-	dwSize=sizeof(DWORD); dwType=REG_DWORD;
-	lRes = RegQueryValueEx(hKey, L"mouseX", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
-	if(lRes!=ERROR_SUCCESS)
-		return -32;
-	_dwMouseX=dwData;
+		dwSize=sizeof(DWORD); dwType=REG_DWORD;
+		lRes = RegQueryValueEx(hKey, L"mouseX", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
+		if(lRes==ERROR_SUCCESS)
+			_dwMouseX=dwData;
 
-	dwSize=sizeof(DWORD); dwType=REG_DWORD;
-	lRes = RegQueryValueEx(hKey, L"mouseY", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
-	if(lRes!=ERROR_SUCCESS)
-		return -33;
-	_dwMouseY=dwData;
+		dwSize=sizeof(DWORD); dwType=REG_DWORD;
+		lRes = RegQueryValueEx(hKey, L"mouseY", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
+		if(lRes==ERROR_SUCCESS)
+			_dwMouseY=dwData;
+	}
+
 
 	//read sleep time in seconds
 	dwSize=sizeof(DWORD); dwType=REG_DWORD;
 	lRes = RegQueryValueEx(hKey, L"sleepTime", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
 	if(lRes!=ERROR_SUCCESS)
-		return -41;
-	_dwSLEEPTIME=dwData*1000; 
+		_dwSLEEPTIME=dwData*1000; 
+
+	//bdoLogging
+	dwSize=sizeof(DWORD); dwType=REG_DWORD;
+	lRes = RegQueryValueEx(hKey, L"doLogging", NULL, &dwType, (LPBYTE)&dwData, &dwSize);
+	if(lRes!=ERROR_SUCCESS)
+		bUseLogging=TRUE;
+	else
+		bUseLogging=FALSE; 
 
 	RegCloseKey(hKey);
 	return 0;
