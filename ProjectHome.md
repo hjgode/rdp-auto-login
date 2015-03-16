@@ -1,0 +1,1 @@
+Tools to start an RDP session automatically on Windows Mobile devices and keep the session busy.
