@@ -256,9 +256,7 @@ void nclog (const wchar_t *fmt, ...)
 #ifdef USEWINSOCK
 	wsa_send(bufOutA);
 #endif
-
 		writefile(bufW);
-
 #ifdef DEBUG
 	DEBUGMSG(1, (bufW));
 #else

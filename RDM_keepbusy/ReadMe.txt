@@ -44,8 +44,12 @@ REGEDIT4
 
 build instructions:
 	obsolete(wm653pro): for whatever reason Release builds of RDM_KeepBusy will not run on devices, so use Debug builds instead
+	V 1.8.0 can be build as DEBUG or RELEASE variant and both run fine now
 	
 history:
+	01.06.2015	Version 1.8.0
+	removed nclog references and nclog.h and nclog.cpp -> NO more file logging! All logging is done using DEBUGMSG now
+	
 	15.01.2013	
 	fixed a bug where first RDM session was handled correctly, but after (Disconnect) and (X) close further
 	RDM sessions were not protected. I have used static vars which were set as when a valid input window was

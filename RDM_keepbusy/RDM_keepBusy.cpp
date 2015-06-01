@@ -4,13 +4,6 @@
 #include "stdafx.h"
 
 BOOL bUseLogging=FALSE;
-#if bUseLogging
-	#pragma comment (exestr, "with logging")
-	#pragma message ("### compiled with logging ###")
-#else
-	#pragma comment (exestr, "no logging")
-	#pragma message ("### compiled without logging ###")
-#endif
 
 #define TEST
 #undef TEST
@@ -295,7 +288,7 @@ HWND findWindow(HWND hWndStart, TCHAR* szTitle){
 		GetClassName(hWnd, cszClassString, MAX_PATH);
 		GetWindowText(hWnd, cszWindowString, MAX_PATH);
 		if(bUseLogging)
-			nclog(L"findWindow: \"%s\"  \"%s\"\n", cszClassString, cszWindowString);
+			DEBUGMSG(1, (L"findWindow: \"%s\"  \"%s\"\n", cszClassString, cszWindowString));
 
 		if(wcscmp(cszWindowString, szTitle)==0){
 			bFoundWindow=TRUE;
@@ -327,7 +320,7 @@ HWND findWindowByClass(HWND hWndStart, TCHAR* szClass){
 		GetClassName(hWnd, cszClassString, MAX_PATH);
 		GetWindowText(hWnd, cszWindowString, MAX_PATH);
 		if(bUseLogging)
-			nclog(L"findWindow: \"%s\"  \"%s\"\n", cszClassString, cszWindowString);
+			DEBUGMSG(1, (L"findWindow: \"%s\"  \"%s\"\n", cszClassString, cszWindowString));
 
 		if(wcscmp(cszWindowString, szClass)==0){
 			bFoundClass=TRUE;
@@ -409,11 +402,11 @@ DWORD myWatchThread(LPVOID lpParam){
 	if(hEventWatch!=NULL){
 		if(GetLastError()==ERROR_ALREADY_EXISTS){
 			if(bUseLogging)
-				nclog(L"CreateEvent: Event '%s' already exists\n", sEvent);
+				DEBUGMSG(1, (L"CreateEvent: Event '%s' already exists\n", sEvent));
 		}
 		else
 			if(bUseLogging)
-				nclog(L"CreateEvent: Event '%s' did not yet exist\n", sEvent);
+				DEBUGMSG(1, (L"CreateEvent: Event '%s' did not yet exist\n", sEvent));
 		//now start to wait for the event to be signaled
 		do{
 		DWORD dwRes = WaitForSingleObject(hEventWatch, INFINITE);
@@ -435,7 +428,7 @@ DWORD myWatchThread(LPVOID lpParam){
 	}
 	else{
 		if(bUseLogging)
-			nclog(L"CreateEvent failed: GetLastError=%u\n", GetLastError());
+			DEBUGMSG(1, (L"CreateEvent failed: GetLastError=%u\n", GetLastError()));
 		dwRet=-1;
 	}
 	return dwRet;
@@ -579,18 +572,18 @@ void doMouseMove(HWND hWndRDM){
 	RECT rect;
 	if(GetWindowRect(hWndRDM, &rect)){
 		if(bUseLogging)
-			nclog(L"GetWindowRect: %i,%i : %i,%i\n", rect.left, rect.top, rect.right, rect.bottom);
+			DEBUGMSG(1, (L"GetWindowRect: %i,%i : %i,%i\n", rect.left, rect.top, rect.right, rect.bottom));
 		if(rect.top<0 || rect.bottom<0 || rect.left<0 || rect.right<0)
 		{
 			if(bUseLogging){
-				nclog(L"RDM active window outside screen (inactive?)\n");
-				nclog(L"RDM hwnd=0x%x, foreground hwnd=0x%x\n", hWndRDM, GetForegroundWindow());
+				DEBUGMSG(1, (L"RDM active window outside screen (inactive?)\n"));
+				DEBUGMSG(1, (L"RDM hwnd=0x%x, foreground hwnd=0x%x\n", hWndRDM, GetForegroundWindow()));
 			}
 		}
 	}
 	else{
 		if(bUseLogging)
-			nclog(L"GetWindowRect()failed. GetLastError()=%i\n", GetLastError());	//get 1400=invalid window handle on subsequent calls!?
+			DEBUGMSG(1, (L"GetWindowRect()failed. GetLastError()=%i\n", GetLastError()));	//get 1400=invalid window handle on subsequent calls!?
 	}
     ////Get foreground window -- this is not needed if RDM is launched Full-Screen as it was in this case
     //hWndForeground = GetForegroundWindow();
@@ -598,7 +591,7 @@ void doMouseMove(HWND hWndRDM){
 
     //Give focus to the RDP Client window (even if the logon screen, in case user logged out in the meantime)
 	if(bUseLogging)
-		nclog(L"SetForGroundWindow\n");
+		DEBUGMSG(1, (L"SetForGroundWindow\n"));
     SetForegroundWindow(hWndRDM);
 
     //The timer is reset when the rdp window receives mouse or keyboard input
@@ -617,24 +610,24 @@ void doMouseMove(HWND hWndRDM){
 	// LRESULT SendMessage(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 	lRes = SendMessage (hWndRDM, WM_MOUSEMOVE, NULL, MAKELPARAM(0x100,0));
 		if(bUseLogging)
-			nclog(L"WM_MOUSEMOVE 1, lRes=%u\n", lRes);
+			DEBUGMSG(1, (L"WM_MOUSEMOVE 1, lRes=%u\n", lRes));
 	Sleep(20);
 	lRes = SendMessage (hWndRDM, WM_MOUSEMOVE, NULL, MAKELPARAM(-0x100,0));
 		if(bUseLogging)
-			nclog(L"WM_MOUSEMOVE 2, lRes=%u\n", lRes);
+			DEBUGMSG(1, (L"WM_MOUSEMOVE 2, lRes=%u\n", lRes));
 
 	if(_dwUseMouse==1){
 		lRes = SendMessage(hWndRDM, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(_dwMouseX, _dwMouseY));
 		if(bUseLogging)
-			nclog(L"MOUSEDOWN/UP 1, lRes=%u\n", lRes);
+			DEBUGMSG(1, (L"MOUSEDOWN/UP 1, lRes=%u\n", lRes));
 		Sleep(20);
 		lRes = SendMessage(hWndRDM, WM_LBUTTONUP, MK_LBUTTON, MAKELPARAM(_dwMouseX, _dwMouseY));
 		if(bUseLogging)
-			nclog(L"MOUSEUP 2 DONE, lRes=%u\n", lRes);
+			DEBUGMSG(1, (L"MOUSEUP 2 DONE, lRes=%u\n", lRes));
 	}
 	else
 		if(bUseLogging)
-			nclog(L"MouseClick will not be used\n");
+			DEBUGMSG(1, (L"MouseClick will not be used\n"));
 
 	if(_dwUseKeyboard==1){
 		//right
@@ -642,25 +635,25 @@ void doMouseMove(HWND hWndRDM){
 		//msg: 0x101, wParam: 0x27, lParam: 0xc14d0001
 		lRes = SendMessage(hWndRDM, WM_KEYDOWN, _dwKey1, _dwLPARAM11);
 		if(bUseLogging)
-			nclog(L"WM_KEYDOWN 1, lRes=%u\n", lRes);
+			DEBUGMSG(1, (L"WM_KEYDOWN 1, lRes=%u\n", lRes));
 		Sleep(20);
 		lRes = SendMessage(hWndRDM, WM_KEYUP, _dwKey1, _dwLPARAM12);
 		if(bUseLogging)
-			nclog(L"WM_KEYUP 1, lRes=%u\n", lRes);
+			DEBUGMSG(1, (L"WM_KEYUP 1, lRes=%u\n", lRes));
 		//left
 		//msg: 0x100, wParam: 0x25, lParam: 0x14b0001
 		//msg: 0x101, wParam: 0x25, lParam: 0xc14b0001
 		lRes = SendMessage(hWndRDM, WM_KEYDOWN, _dwKey2, _dwLPARAM21);
 		if(bUseLogging)
-			nclog(L"WM_KEYDOWN 2, lRes=%u\n", lRes);
+			DEBUGMSG(1, (L"WM_KEYDOWN 2, lRes=%u\n", lRes));
 		Sleep(20);
 		lRes = SendMessage(hWndRDM, WM_KEYUP, _dwKey2, _dwLPARAM22);
 		if(bUseLogging)
-			nclog(L"WM_KEYUP 2, lRes=%u\n", lRes);
+			DEBUGMSG(1, (L"WM_KEYUP 2, lRes=%u\n", lRes));
 	}
 	else
 		if(bUseLogging)
-			nclog(L"Keyboard will not be used\n");
+			DEBUGMSG(1, (L"Keyboard will not be used\n"));
 
 #ifdef USE_KEYBD
 	////using keyboard event, does not work for WinMo 6.5.3
@@ -713,22 +706,22 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 
 	//allow only one instance
 	if(bUseLogging)
-		nclog(L"CreateMutex...");
+		DEBUGMSG(1, (L"CreateMutex..."));
 	HANDLE hMutex = CreateMutex(NULL, bOwnerShip, sMUTEX);
 	DWORD dwErr = GetLastError();
 	if(bUseLogging)
-		nclog(L"hMutex=0x0%0x, LastError=0x%0x\n", hMutex, dwErr);
+		DEBUGMSG(1, (L"hMutex=0x0%0x, LastError=0x%0x\n", hMutex, dwErr));
 
 	if(hMutex!=NULL){
 		if(dwErr==ERROR_ALREADY_EXISTS){
 			//allow only one instance
 			if(bUseLogging)
-				nclog(L"Mutex already exists, Exit!\n");
+				DEBUGMSG(1, (L"Mutex already exists, Exit!\n"));
 			ReleaseMutex(hMutex);
 			return -3;
 		}
 	}
-	nclog(L"no Mutex. Continueing..!\n");
+	DEBUGMSG(1, (L"no Mutex. Continueing..!\n"));
 
     HWND hWndRDM = NULL;
 	HWND hWinShell = NULL;
@@ -736,29 +729,29 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 
 	//check command line args
 	if(bUseLogging)
-		nclog(L"lpCmdLine= '%s'\n", lpCmdLine);
+		DEBUGMSG(1, (L"lpCmdLine= '%s'\n", lpCmdLine));
 
 	//enable logging to file?
 	if( wcslen(lpCmdLine)>0 && wcsstr(lpCmdLine, L"dologging")!=0)
 	{
 		bUseLogging=TRUE;
-		ncLogEnabled=TRUE;
+//		ncLogEnabled=TRUE;
 	}
 	else{
 		bUseLogging=FALSE;
-		ncLogEnabled=FALSE;
+//		ncLogEnabled=FALSE;
 	}
 	if( wcslen(lpCmdLine)>0 && _wcsicmp(L"noRDPstart", lpCmdLine)==0)
 	{
 		if(bUseLogging)
-			nclog(L"RDP client will not be started, lpCmdLine 'noRDPstart' found\n");
+			DEBUGMSG(1, (L"RDP client will not be started, lpCmdLine 'noRDPstart' found\n"));
 	}
 	else{
 		//First check if TSC is already running???
 		HWND hwndTemp = getTSChandle();
 		if(hwndTemp!=NULL){	//found a running TSC window
 			if(bUseLogging)
-				nclog(L"TSC is already running\n");
+				DEBUGMSG(1, (L"TSC is already running\n"));
 		}
 		else{ //start a new TSC client
 			//Firstly launch RDP Client
@@ -778,7 +771,7 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 			}
 			else{
 				if(bUseLogging)
-					nclog(L"RDP client started, sleeping 500ms...\n");
+					DEBUGMSG(1, (L"RDP client started, sleeping 500ms...\n"));
 				Sleep(500);
 			}
 		}
@@ -807,11 +800,11 @@ int WINAPI WinMain(	HINSTANCE hInstance,
     {
         //check if RDP Client is running, otherwise exit?
 		if(bUseLogging)
-			nclog(L"FindWindow 'TSSHELLWND'...\n");
+			DEBUGMSG(1, (L"FindWindow 'TSSHELLWND'...\n"));
         hWndRDM = getTSChandle();	//get correct window handle?, test with GetWindowRect()
 		if(hWndRDM!=NULL){
 			if(bUseLogging)
-				nclog(L"'TSSHELLWND' found.\n");
+				DEBUGMSG(1, (L"'TSSHELLWND' found.\n"));
 			//window found
 			EnterCriticalSection(&myCriticalSection);
 
@@ -827,35 +820,35 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 			HWND hwndTest = FindWindow(L"TSSHELLWND", NULL);
 #endif
 			if(hwndTest!=NULL){
-				nclog(L"check for TSSHELLWND is active\n");
+				DEBUGMSG(1, (L"check for TSSHELLWND is active\n"));
 				GetWindowText(hwndTest, szTitle, MAX_PATH);
 				pFound=wcsstr(szTitle, szSearch);
 				if(pFound!=NULL){
 					if(bUseLogging)
-						nclog(L"Found 'Remote Desktop Mobile/Terminal Services Client' in title\n");
+						DEBUGMSG(1, (L"Found 'Remote Desktop Mobile/Terminal Services Client' in title\n"));
 					pos=(int)(pFound-szTitle + 1);
 					if(pos==1) //the window text starts with "Remote Desktop Mobile"
 					{
 						if(bUseLogging)
-							nclog(L"'Remote Desktop Mobile/Terminal Services Client' is idle\n");
+							DEBUGMSG(1, (L"'Remote Desktop Mobile/Terminal Services Client' is idle\n"));
 						g_dwStatus=idle;
 					}
 					else
 					{
 						if(bUseLogging)
-							nclog(L"'Remote Desktop Mobile/Terminal Services Client' is active\n");
+							DEBUGMSG(1, (L"'Remote Desktop Mobile/Terminal Services Client' is active\n"));
 						g_dwStatus=active;
 					}
 				}
 				else{
 					if(bUseLogging)
-						nclog(L"'Remote Desktop Mobile/Terminal Services Client' is not active\n");
+						DEBUGMSG(1, (L"'Remote Desktop Mobile/Terminal Services Client' is not active\n"));
 					g_dwStatus=inactive;
 				}
 			}
 			else{
 				if(bUseLogging)
-					nclog(L"'Remote Desktop Mobile/Terminal Services Client' is not found\n");
+					DEBUGMSG(1, (L"'Remote Desktop Mobile/Terminal Services Client' is not found\n"));
 				g_dwStatus=notfound;
 			}
 
@@ -864,7 +857,7 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 			//did we reach the timeout
 			if(ii==0 && g_dwStatus==active){
 				if(bUseLogging)
-					nclog(L"Calling doMouseMove()\n");
+					DEBUGMSG(1, (L"Calling doMouseMove()\n"));
 				doMouseMove(hWndRDM);
 			}
         }//hWndRDM
@@ -872,7 +865,7 @@ int WINAPI WinMain(	HINSTANCE hInstance,
         {	
 			//window not found
 			if(bUseLogging)
-				nclog(L"FindWindow failed for 'TSSHELLWND'\n");
+				DEBUGMSG(1, (L"FindWindow failed for 'TSSHELLWND'\n"));
             //Sleep(5000);
 			EnterCriticalSection(&myCriticalSection);
 			g_dwStatus=notfound;
@@ -885,12 +878,12 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 		ii++;
 		if(ii > _dwSLEEPTIME/1000){
 			if(bUseLogging)
-				nclog(L"Counter reset\n");
+				DEBUGMSG(1, (L"Counter reset\n"));
 			ii=0; //reset counter
 		}
         //Sleep 
 		if(bUseLogging)
-			nclog(L"Sleep ...\n");
+			DEBUGMSG(1, (L"Sleep ...\n"));
 		Sleep(1000);
     }
     while (_bRunApp); //The check (NULL != hWndRDM) is already done inside the loop
@@ -898,7 +891,7 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 
 Exit:
 	if(bUseLogging)
-		nclog(L"Exit!\n");
+		DEBUGMSG(1, (L"Exit!\n"));
     // Release resources used by the critical section object.
 	EnterCriticalSection(&myCriticalSection);
 	g_dwStatus=stopped;
