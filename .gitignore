@@ -216,3 +216,8 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+*.ncb
+RDM_keepbusy/RDM_keepBusy.suo
+*.bsc
+rdp-auto-login/Windows Mobile 5.0 Smartphone SDK (ARMV4I)/Debug/RDP_autoLogin.res
+*.ncb
