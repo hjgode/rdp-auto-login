@@ -103,7 +103,7 @@
 				MPIAcceptFilter=""
 			/>
 			<DeploymentTool
-				DeploymentDevice="C2B0BA8B-9547-4740-9B68-C371C71045F9"
+				DeploymentDevice="81551346-886F-43a2-B707-A91FAE1B33A7"
 			/>
 			<DebuggerTool
 				RemoteExecutable=""
@@ -139,41 +139,6 @@
 			/>
 			<DeploymentTool
 				DeploymentDevice="81551346-886F-43a2-B707-A91FAE1B33A7"
-			/>
-			<DebuggerTool
-				RemoteExecutable=""
-				Arguments=""
-			/>
-		</Configuration>
-		<Configuration
-			Name="Debug|Windows Mobile 6 Standard SDK (ARMV4I)"
-			>
-			<DebugSettings
-				Command="$(TargetPath)"
-				WorkingDirectory=""
-				CommandArguments=""
-				Attach="false"
-				DebuggerType="3"
-				Remote="1"
-				RemoteMachine="GE3SDTBPZ2Y4J"
-				RemoteCommand=""
-				HttpUrl=""
-				PDBPath=""
-				SQLDebugging=""
-				Environment=""
-				EnvironmentMerge="true"
-				DebuggerFlavor=""
-				MPIRunCommand=""
-				MPIRunArguments=""
-				MPIRunWorkingDirectory=""
-				ApplicationCommand=""
-				ApplicationArguments=""
-				ShimCommand=""
-				MPIAcceptMode=""
-				MPIAcceptFilter=""
-			/>
-			<DeploymentTool
-				DeploymentDevice="a573bbb0-70cf-4466-91a7-5e4dbd1c1c41"
 			/>
 			<DebuggerTool
 				RemoteExecutable=""
@@ -348,7 +313,7 @@
 				MPIAcceptFilter=""
 			/>
 			<DeploymentTool
-				DeploymentDevice="C2B0BA8B-9547-4740-9B68-C371C71045F9"
+				DeploymentDevice="81551346-886F-43a2-B707-A91FAE1B33A7"
 			/>
 			<DebuggerTool
 				RemoteExecutable=""
@@ -384,41 +349,6 @@
 			/>
 			<DeploymentTool
 				DeploymentDevice="81551346-886F-43a2-B707-A91FAE1B33A7"
-			/>
-			<DebuggerTool
-				RemoteExecutable=""
-				Arguments=""
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release|Windows Mobile 6 Standard SDK (ARMV4I)"
-			>
-			<DebugSettings
-				Command="$(TargetPath)"
-				WorkingDirectory=""
-				CommandArguments=""
-				Attach="false"
-				DebuggerType="3"
-				Remote="1"
-				RemoteMachine="GE3SDTBPZ2Y4J"
-				RemoteCommand=""
-				HttpUrl=""
-				PDBPath=""
-				SQLDebugging=""
-				Environment=""
-				EnvironmentMerge="true"
-				DebuggerFlavor=""
-				MPIRunCommand=""
-				MPIRunArguments=""
-				MPIRunWorkingDirectory=""
-				ApplicationCommand=""
-				ApplicationArguments=""
-				ShimCommand=""
-				MPIAcceptMode=""
-				MPIAcceptFilter=""
-			/>
-			<DeploymentTool
-				DeploymentDevice="a573bbb0-70cf-4466-91a7-5e4dbd1c1c41"
 			/>
 			<DebuggerTool
 				RemoteExecutable=""
