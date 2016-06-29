@@ -444,7 +444,7 @@ int startCETSC(TCHAR* server, TCHAR* user, TCHAR* pass){
 #if _WIN32_WCE == 0x420
 		if(IsProcessRunning(L"mstsc40.exe")){		//on pocketpc we have mstsc40.exe
 			if( KillExeWindow(L"mstsc40.exe") ){
-#elif _WIN32_WCE == 0x700
+#elif _WIN32_WCE == 0x700 || _WIN32_WCE == 0x500
 		while(IsProcessRunning(L"cetsc.exe")){
 			if( KillAllExe(L"cetsc.exe")>0 ){
 #else
@@ -470,7 +470,7 @@ int startCETSC(TCHAR* server, TCHAR* user, TCHAR* pass){
 		PROCESS_INFORMATION pi;
 #if _WIN32_WCE == 0x420
 		if (CreateProcess(L"\\windows\\mstsc40.exe", L"", NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi)!=0)
-#elif _WIN32_WCE == 0x700
+#elif _WIN32_WCE == 0x700 || _WIN32_WCE == 0x500
 		if (CreateProcess(L"\\windows\\cetsc.exe", L"", NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi)!=0)
 #else
 		if (CreateProcess(L"\\windows\\wpctsc.exe", L"", NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi)!=0)
@@ -491,7 +491,7 @@ int startCETSC(TCHAR* server, TCHAR* user, TCHAR* pass){
 		//find the "Remote Desktop Mobile" dialog window
 #if _WIN32_WCE == 0x420
 		DWORD pidTSC = FindPID(L"mstsc40.exe");
-#elif _WIN32_WCE == 0x700
+#elif _WIN32_WCE == 0x700 || _WIN32_WCE == 0x500
 		DWORD pidTSC = FindPID(L"cetsc.exe");
 #else
 		DWORD pidTSC = FindPID(L"wpctsc.exe");
@@ -503,7 +503,7 @@ int startCETSC(TCHAR* server, TCHAR* user, TCHAR* pass){
 #if _WIN32_WCE == 0x420
 			if(FindPID(L"mstsc40.exe") != 0){
 				if(FindPID(hTscDialog)!= FindPID(L"mstsc40.exe")){
-#elif _WIN32_WCE == 0x700
+#elif _WIN32_WCE == 0x700 || _WIN32_WCE == 0x500
 			if(FindPID(L"cetsc.exe") != 0){
 				if(FindPID(hTscDialog)!= FindPID(L"cetsc.exe")){
 #else
