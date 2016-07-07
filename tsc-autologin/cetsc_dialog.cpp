@@ -8,6 +8,7 @@
 
 #define TSC_EXE L"cetsc.exe"
 
+TCHAR* szRDPfile;
 TCHAR szServer[MAX_PATH];
 TCHAR szUser[MAX_PATH];
 TCHAR szPassword[MAX_PATH];
@@ -364,6 +365,7 @@ int KillAllExe(TCHAR* exefile){
 
 int fillTSCdialog(HWND hwnd){
 	//fill in server in first dialog
+	//TODO: skip if rdp file has been provided as then the second dialog is shown directly!
 	SetDlgItemText(hwnd, 0x3e9, szServer);
 	//click OK
 	HWND hwndConnect=GetDlgItem(hwnd, 0x01);
@@ -402,7 +404,16 @@ int fillTSCdialog(HWND hwnd){
 	return 0;
 }
 
-int startCETSC(TCHAR* server, TCHAR* user, TCHAR* pass){
+int startCETSC(TCHAR* rdpfile, TCHAR* server, TCHAR* user, TCHAR* pass){
+	
+	if(rdpfile!=NULL && wcslen(rdpfile)>0){
+		szRDPfile=new TCHAR(wcslen(rdpfile)*sizeof(TCHAR));
+		wsprintf(szRDPfile, L"%s", rdpfile);
+	}
+	else{
+		szRDPfile=new TCHAR(2*sizeof(TCHAR));
+		wsprintf(szRDPfile, L"");
+	}
 	//get data
 	if(wcslen(server)>0)
 		wsprintf(szServer, L"%s", server);
@@ -468,10 +479,15 @@ int startCETSC(TCHAR* server, TCHAR* user, TCHAR* pass){
 		DWORD dProcIDTSC=0; //to save proc ID of TSC main window
 		//start a new instance of tsc
 		PROCESS_INFORMATION pi;
+		TCHAR lpCmdLine[MAX_PATH];
+		if(rdpfile==NULL)
+			wsprintf(lpCmdLine, L"");
+		else
+			wsprintf(lpCmdLine, L"%s /v:%s", szRDPfile, szServer);
 #if _WIN32_WCE == 0x420
-		if (CreateProcess(L"\\windows\\mstsc40.exe", L"", NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi)!=0)
+		if (CreateProcess(L"\\windows\\mstsc40.exe", lpCmdLine, NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi)!=0)
 #elif _WIN32_WCE == 0x700 || _WIN32_WCE == 0x500
-		if (CreateProcess(L"\\windows\\cetsc.exe", L"", NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi)!=0)
+		if (CreateProcess(L"\\windows\\cetsc.exe", lpCmdLine, NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi)!=0)
 #else
 		if (CreateProcess(L"\\windows\\wpctsc.exe", L"", NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi)!=0)
 #endif

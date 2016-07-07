@@ -12,10 +12,14 @@ int _tmain(int argc, _TCHAR* argv[])
 		DEBUGMSG(1, (L"[%i] '%s'\n", i, argv[i]));
 
 	if(argc==4){
-		startCETSC(argv[1],argv[2],argv[3]);
+		startCETSC(NULL, argv[1],argv[2],argv[3]);
+	}
+	else if(argc==5){
+		// rdpfile server user password
+		startCETSC(argv[1],argv[2],argv[3],argv[4]);
 	}
 	else
-		startCETSC(L"",L"",L"");
+		startCETSC(NULL, L"",L"",L"");
 	return 0;
 }
 

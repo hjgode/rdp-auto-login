@@ -1,3 +1,3 @@
 // cetsc_dialog.h
 
-int startCETSC(TCHAR*,TCHAR*,TCHAR*);
+int startCETSC(TCHAR*,TCHAR*,TCHAR*,TCHAR*);
