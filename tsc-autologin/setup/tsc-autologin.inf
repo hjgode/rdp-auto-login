@@ -1,0 +1,42 @@
+[Version]
+Signature = "$Chicago$"
+CESignature = "$Windows CE$"
+Provider = "hgo"
+
+[CEStrings]
+Appname = "tsc-autologin"
+InstallDir = "%CE1%\%AppName%" ; (%CE1%\tsc-autologin)
+
+[SourceDisksNames]
+2 = ,"Dir2",,.\\Program Files\tsc-autologin
+3 = ,"Dir3",,.\Windows\Desktop
+4 = ,"Dir4",,.\Windows
+
+[SourceDisksFiles]
+"tsc-autologin.exe" = 2 ; 001
+"start-tsc.cmd" = 3 ; 002
+"start-tsc2.cmd" = 3 ; 003
+"tsc-autologin.lnk" = 3 ; 004
+"tsc-autologin2.lnk" = 3 ; 005
+rdesktop.rdp = 4 ; 006
+
+[DefaultInstall]
+CopyFiles = CopierVersDir00,CopierVersDir01,CopierVersDir02
+
+[CopierVersDir00]  ; (\%CE1%\tsc-autologin : \\Program Files\tsc-autologin)
+"tsc-autologin.exe",,,0x00000001
+
+[CopierVersDir01]  ; (Windows\Desktop : Windows\Desktop)
+"start-tsc.cmd",,,0x00000001
+"start-tsc2.cmd",,,0x00000001
+"tsc-autologin.lnk",,,0x00000001
+"tsc-autologin2.lnk",,,0x00000001
+
+[CopierVersDir02]  ; (Windows : Windows)
+rdesktop.rdp,,,0x00000001
+
+[DestinationDirs]
+CopierVersDir00 = 0, %InstallDir%
+CopierVersDir01 = 0, Windows\Desktop
+CopierVersDir02 = 0, Windows
+

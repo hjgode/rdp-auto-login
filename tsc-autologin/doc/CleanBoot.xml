@@ -1,0 +1,8 @@
+<?xml version="1.0"?> 
+<DevInfo Action="Set">
+	<Subsystem Name="SS_Client">
+		<Group Name="Command">
+			<Field Name="Boot">Clean</Field>
+		</Group>
+	</Subsystem>
+</DevInfo>

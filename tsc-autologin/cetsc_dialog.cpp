@@ -363,35 +363,78 @@ int KillAllExe(TCHAR* exefile){
 	return numKilled;
 }
 
+void fillDialog1(){
+}
+
+//process to autologin to Terminal Server
+//	"\windows\rdesktop.rdp" "199.64.70.66" "rdesktop" "rdesktop"
+//	"199.64.70.66" "rdesktop" "rdesktop"
 int fillTSCdialog(HWND hwnd){
+	int iRet=0;
 	//fill in server in first dialog
 	//TODO: skip if rdp file has been provided as then the second dialog is shown directly!
-	SetDlgItemText(hwnd, 0x3e9, szServer);
-	//click OK
-	HWND hwndConnect=GetDlgItem(hwnd, 0x01);
-	PostMessage(hwndConnect, BM_CLICK, NULL, NULL);
-	Sleep(1000);
-	//find new dialog
+	TCHAR testServerDlg[MAX_PATH];
+	BOOL bLookFor2ndDialog=FALSE;
+	if(GetDlgItemText(hwnd, 0x1393, testServerDlg, MAX_PATH) > 0)
+	{
+		DEBUGMSG(1, (L"first dialog: %s\n", testServerDlg));
+		//this is the server dialog, the first dialog
+		//SetDlgItemText(hwnd, 0x3e9, szServer);
+		HWND hServerWin = GetDlgItem(hwnd, 0x1394);
+		SetWindowText(hServerWin, szServer);
+		UpdateWindow(hwnd);
+		//click OK
+		HWND hwndConnect=GetDlgItem(hwnd, 0x01);
+		PostMessage(hwndConnect, BM_CLICK, NULL, NULL);
+		Sleep(1000);
+		bLookFor2ndDialog=TRUE;
+	}
+	else{
+		DEBUGMSG(1, (L"not first dialog!\n"));
+	}
+	//find dialog again
 	TCHAR winText[64];
 	HWND hwndDlg2 = FindWindow(L"Dialog", L"Remote Desktop Connection");
 	BOOL bFound=FALSE;
 	if(hwndDlg2 != NULL){
-		if(hwndDlg2 == hwnd){
-			//get next window
-			while( (hwndDlg2=GetWindow(hwnd, GW_HWNDNEXT)) != NULL && (hwndDlg2!=hwnd) ){
-				GetWindowText(hwndDlg2, winText, 64);
-				if(wcsicmp(winText, L"Remote Desktop Connection")){
-					DEBUGMSG(1, (L"fillTSCdialog-GetWindow()=0x%08x\n", hwndDlg2));
-					bFound=TRUE;
-					break;
+		if(bLookFor2ndDialog){
+			DEBUGMSG(1, (L"fillTSCdialog-looking for next dialog...\n"));
+			if(hwndDlg2 == hwnd){
+				//get next window
+				DEBUGMSG(1, (L"fillTSCdialog-looking for next dialog loop...\n"));
+				while( (hwndDlg2=GetWindow(hwndDlg2, GW_HWNDNEXT)) != NULL && (hwndDlg2!=hwnd) ){
+					GetWindowText(hwndDlg2, winText, 64);
+					if(wcsicmp(winText, L"Remote Desktop Connection")==0){
+						DEBUGMSG(1, (L"fillTSCdialog-found next RDC window=0x%08x\n", hwndDlg2));
+						bFound=TRUE;
+						break;
+					}
 				}
+			}
+			else{
+				DEBUGMSG(1, (L"fillTSCdialog-found next RDC window=0x%08x\n", hwndDlg2));
+				bFound=TRUE;
 			}
 		}
 		else{
-			bFound=TRUE;
+			//look for second dialog only
+			DEBUGMSG(1, (L"fillTSCdialog-looking for 2nd dialog only...\n"));
+			//look for the &Password static text
+			if(GetDlgItemText(hwndDlg2, 0x6a, testServerDlg, MAX_PATH) > 0){
+				DEBUGMSG(1, (L"second dialog: %s\n", testServerDlg));
+				GetWindowText(hwndDlg2, winText, 64);
+				if(wcsicmp(winText, L"Remote Desktop Connection")==0){
+					DEBUGMSG(1, (L"fillTSCdialog-GetWindow()=0x%08x\n", hwndDlg2));
+					bFound=TRUE;
+				}
+			}
+			else{
+				DEBUGMSG(1, (L"second dialog: GetDlgItemText failed\n"));
+			}
 		}
 	}
 	if(bFound){
+		DEBUGMSG(1, (L"filling second dialog...\n"));
 		//fill in user and password
 		SetDlgItemText(hwndDlg2, 0x3e8, szUser);
 		SetDlgItemText(hwndDlg2, 0x3ea, szPassword);
@@ -401,7 +444,11 @@ int fillTSCdialog(HWND hwnd){
 		//scanTscWindow(hwndDlg2);
 #endif
 	}
-	return 0;
+	else{
+		DEBUGMSG(1, (L"NO dialog found for filling...\n"));
+		iRet=-1;
+	}
+	return iRet;
 }
 
 int startCETSC(TCHAR* rdpfile, TCHAR* server, TCHAR* user, TCHAR* pass){

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<DevInfo Action="Set" Persist="true">
+ <Subsystem Name="Funk Security">
+  <Group Name="Profile" Instance="Profile_1">
+   <Field Name="SSID">SUPPORT</Field> 
+   <Field Name="Association">RSN</Field> 
+   <Field Name="Encryption">AES</Field>
+   <Field Name="PreSharedKey" Encrypt="binary.base64">dzcrvPwmAWjcJAOO75RQEQ==</Field> 
+  </Group>
+ </Subsystem>
+ <Subsystem Name="IQueue">
+  <Field Name="Associated Server IP">199.64.70.66</Field> 
+ </Subsystem>
+</DevInfo>
