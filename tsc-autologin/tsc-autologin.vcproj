@@ -389,6 +389,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\rdp-file.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -425,6 +429,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\TextDocument.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\tsc-autologin.cpp"
 				>
 			</File>
@@ -439,7 +447,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\rdp-file.h"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TextDocument.h"
 				>
 			</File>
 		</Filter>

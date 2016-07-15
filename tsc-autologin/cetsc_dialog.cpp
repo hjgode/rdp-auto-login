@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+#include "rdp-file.h"
+
 #include "tlhelp32.h"
 #pragma comment(lib, "toolhelp.lib")
 #ifndef TH32CS_SNAPNOHEAPS
@@ -8,7 +10,7 @@
 
 #define TSC_EXE L"cetsc.exe"
 
-TCHAR* szRDPfile;
+TCHAR *szRDPfile;
 TCHAR szServer[MAX_PATH];
 TCHAR szUser[MAX_PATH];
 TCHAR szPassword[MAX_PATH];
@@ -451,21 +453,28 @@ int fillTSCdialog(HWND hwnd){
 	return iRet;
 }
 
-int startCETSC(TCHAR* rdpfile, TCHAR* server, TCHAR* user, TCHAR* pass){
-	
-	if(rdpfile!=NULL && wcslen(rdpfile)>0){
-		szRDPfile=new TCHAR(wcslen(rdpfile)*sizeof(TCHAR));
-		wsprintf(szRDPfile, L"%s", rdpfile);
+int startCETSC(TCHAR* rdpfileOrserver, TCHAR* user, TCHAR* pass){
+	szRDPfile=new TCHAR(wcslen(rdpfileOrserver)*sizeof(TCHAR));
+	memset(szRDPfile,0,wcslen(rdpfileOrserver)*sizeof(TCHAR));
+
+	if ( isFile(rdpfileOrserver) ){
+		if(rdpfileOrserver!=NULL && wcslen(rdpfileOrserver)>0){
+			//szRDPfile=new TCHAR(wcslen(rdpfile)*sizeof(TCHAR));
+			wsprintf(szServer, L"%s", getServer(rdpfileOrserver));
+		}
+		else{
+			szRDPfile=NULL;
+			//wsprintf(szRDPfile, L"");
+		}
+	}else{ //1st arg is no file
+		//get data
+		szRDPfile=NULL;
+		if(wcslen(rdpfileOrserver)>0)
+			wsprintf(szServer, L"%s", rdpfileOrserver);
+		else
+			wsprintf (szServer, L"199.64.70.66");
 	}
-	else{
-		szRDPfile=new TCHAR(2*sizeof(TCHAR));
-		wsprintf(szRDPfile, L"");
-	}
-	//get data
-	if(wcslen(server)>0)
-		wsprintf(szServer, L"%s", server);
-	else
-		wsprintf (szServer, L"199.64.70.66");
+
 	if(wcslen(user)>0)
 		wsprintf(szUser, L"%s", user);
 	else
@@ -527,10 +536,17 @@ int startCETSC(TCHAR* rdpfile, TCHAR* server, TCHAR* user, TCHAR* pass){
 		//start a new instance of tsc
 		PROCESS_INFORMATION pi;
 		TCHAR lpCmdLine[MAX_PATH];
-		if(rdpfile==NULL)
-			wsprintf(lpCmdLine, L"");
-		else
+		if(szRDPfile!=NULL && wcslen(szServer)>0)
 			wsprintf(lpCmdLine, L"%s /v:%s", szRDPfile, szServer);
+		else if (wcslen(szServer)>0)
+			wsprintf(lpCmdLine, L"/v:%s", szServer);
+		else if (szRDPfile!=NULL)
+			wsprintf(lpCmdLine, L"%s", szServer);
+		else
+			wsprintf(lpCmdLine, L"");
+
+		DEBUGMSG(1, (L"starting tsc with cmdline: '%s'\n",lpCmdLine));
+
 #if _WIN32_WCE == 0x420
 		if (CreateProcess(L"\\windows\\mstsc40.exe", lpCmdLine, NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi)!=0)
 #elif _WIN32_WCE == 0x700 || _WIN32_WCE == 0x500
