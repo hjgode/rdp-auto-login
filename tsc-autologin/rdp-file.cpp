@@ -1,7 +1,5 @@
 #include "stdafx.h"
 
-#include "TextDocument.h"
-
 BOOL isFile(TCHAR* fname){
 	HANDLE hFile=NULL;
 	hFile = CreateFile(fname, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);

@@ -457,10 +457,16 @@ int startCETSC(TCHAR* rdpfileOrserver, TCHAR* user, TCHAR* pass){
 	szRDPfile=new TCHAR(wcslen(rdpfileOrserver)*sizeof(TCHAR));
 	memset(szRDPfile,0,wcslen(rdpfileOrserver)*sizeof(TCHAR));
 
+	TCHAR szTmp[64];
+
 	if ( isFile(rdpfileOrserver) ){
 		if(rdpfileOrserver!=NULL && wcslen(rdpfileOrserver)>0){
 			//szRDPfile=new TCHAR(wcslen(rdpfile)*sizeof(TCHAR));
-			wsprintf(szServer, L"%s", getServer(rdpfileOrserver));
+			wsprintf(szTmp, L"%s", getServer(rdpfileOrserver));
+			if(wcslen(szTmp)>0)
+				wsprintf(szRDPfile, L"%s", rdpfileOrserver);
+			else
+				MessageBox(HWND_TOPMOST, L"rdpfile has no server", L"Error", MB_OK);
 		}
 		else{
 			szRDPfile=NULL;
@@ -511,7 +517,7 @@ int startCETSC(TCHAR* rdpfileOrserver, TCHAR* user, TCHAR* pass){
 #if _WIN32_WCE == 0x420
 		if(IsProcessRunning(L"mstsc40.exe")){		//on pocketpc we have mstsc40.exe
 			if( KillExeWindow(L"mstsc40.exe") ){
-#elif _WIN32_WCE == 0x700 || _WIN32_WCE == 0x500
+#elif _WIN32_WCE == 0x700 || _WIN32_WCE == 0x500 || _WIN32_WCE == 0x600
 		while(IsProcessRunning(L"cetsc.exe")){
 			if( KillAllExe(L"cetsc.exe")>0 ){
 #else
@@ -536,12 +542,12 @@ int startCETSC(TCHAR* rdpfileOrserver, TCHAR* user, TCHAR* pass){
 		//start a new instance of tsc
 		PROCESS_INFORMATION pi;
 		TCHAR lpCmdLine[MAX_PATH];
-		if(szRDPfile!=NULL && wcslen(szServer)>0)
-			wsprintf(lpCmdLine, L"%s /v:%s", szRDPfile, szServer);
+		//build cmdLine
+		if(szRDPfile!=NULL)
+			//wsprintf(lpCmdLine, L"%s /v:%s", szRDPfile, szServer);
+			wsprintf(lpCmdLine, L"%s", szRDPfile); //use only rdpfile, no server arg!
 		else if (wcslen(szServer)>0)
 			wsprintf(lpCmdLine, L"/v:%s", szServer);
-		else if (szRDPfile!=NULL)
-			wsprintf(lpCmdLine, L"%s", szServer);
 		else
 			wsprintf(lpCmdLine, L"");
 
@@ -549,7 +555,7 @@ int startCETSC(TCHAR* rdpfileOrserver, TCHAR* user, TCHAR* pass){
 
 #if _WIN32_WCE == 0x420
 		if (CreateProcess(L"\\windows\\mstsc40.exe", lpCmdLine, NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi)!=0)
-#elif _WIN32_WCE == 0x700 || _WIN32_WCE == 0x500
+#elif _WIN32_WCE == 0x700 || _WIN32_WCE == 0x500 || _WIN32_WCE == 0x600
 		if (CreateProcess(L"\\windows\\cetsc.exe", lpCmdLine, NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi)!=0)
 #else
 		if (CreateProcess(L"\\windows\\wpctsc.exe", L"", NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi)!=0)
@@ -570,7 +576,7 @@ int startCETSC(TCHAR* rdpfileOrserver, TCHAR* user, TCHAR* pass){
 		//find the "Remote Desktop Mobile" dialog window
 #if _WIN32_WCE == 0x420
 		DWORD pidTSC = FindPID(L"mstsc40.exe");
-#elif _WIN32_WCE == 0x700 || _WIN32_WCE == 0x500
+#elif _WIN32_WCE == 0x700 || _WIN32_WCE == 0x500 || _WIN32_WCE == 0x600
 		DWORD pidTSC = FindPID(L"cetsc.exe");
 #else
 		DWORD pidTSC = FindPID(L"wpctsc.exe");
@@ -582,7 +588,7 @@ int startCETSC(TCHAR* rdpfileOrserver, TCHAR* user, TCHAR* pass){
 #if _WIN32_WCE == 0x420
 			if(FindPID(L"mstsc40.exe") != 0){
 				if(FindPID(hTscDialog)!= FindPID(L"mstsc40.exe")){
-#elif _WIN32_WCE == 0x700 || _WIN32_WCE == 0x500
+#elif _WIN32_WCE == 0x700 || _WIN32_WCE == 0x500 || _WIN32_WCE == 0x600
 			if(FindPID(L"cetsc.exe") != 0){
 				if(FindPID(hTscDialog)!= FindPID(L"cetsc.exe")){
 #else
