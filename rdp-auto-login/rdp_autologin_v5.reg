@@ -1,0 +1,22 @@
+REGEDIT4
+
+[HKEY_LOCAL_MACHINE\Software\RDP_autologin]
+"Username"="rdesktop"
+"Password"="rdesktop"
+"Domain"="corpnet"
+"AudioRedirectionMode"=dword:00000002
+"ExecArgs"="nordpstart"
+"DesktopWidth"="640"
+"DesktopHeight"="480"
+"Computer"="192.168.128.5"
+"FullScreen"="0"
+"EnableDriveRedirection"=dword:00000000
+"StartOnExit"="\\Windows\\rdp_keepbusy.exe"
+"UseMouseClick"="0"
+"Status"="connecting..."
+"Save Password"="1"
+"DeviceStorage"=dword:00000001
+"ColorDepth"=dword:00000001
+"SavePassword"="1"
+"FitToScreen"="0"
+
