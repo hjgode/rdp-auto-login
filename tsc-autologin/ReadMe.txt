@@ -2,7 +2,11 @@
     CONSOLE APPLICATION : tsc-autologin Project Overview
 ========================================================================
 
-tool to automate login within Remote Desktop Connection application cetsc.exe
+tool to automate login within Remote Desktop Connection application cetsc.exe.
+
+############
+This is for Windows CE only! For Windows Mobile wpctsc.exe use rdp_autologin.
+############
 
 will fill in user name and password automatically into dialogs opened 
 by cetsc.exe
