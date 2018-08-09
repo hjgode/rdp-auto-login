@@ -3,7 +3,9 @@
 
 #include "stdafx.h"
 
-BOOL bUseLogging=FALSE;
+#pragma comment(user, "version 20180809")
+
+BOOL bUseLogging=TRUE;
 
 #define TEST
 #undef TEST
@@ -21,6 +23,16 @@ BOOL bUseLogging=FALSE;
 BOOL _bRunApp = TRUE;				//the var that lets exit the code
 DWORD idThreadWatch=0;				//the thread that waits for shutdown event
 HANDLE hEventWatch=NULL;			//let the background thread show the actual status
+
+//text used to find RDM main window class and connected session window
+// for PPC2003:
+/*	"192.168.128.5 - Terminal Services Client" (UIMainClass)	// top level window: FindWindow
+		+	"<No name>"	UIContainerClass						// child window to UIMainClass
+			+	"Input Capture Window" (IHWindowClass)			// child window to TerminalServerClient
+*/
+TCHAR szMainRDMWindowsClass[MAX_PATH]; // for WM2005 and up: "TSSHELLWND" and 
+TCHAR szUIcaptureChildWindowClass[MAX_PATH];	//then child window "Input Capture Window"
+TCHAR szRDMconnectedSessionText[MAX_PATH]; // <something>- Remote Desktop Mobile"
 
 //registry args for keyboard SendMessage
 DWORD _dwUseKeyboard = 0;			//use keybd_event keyboard simulation?
@@ -100,7 +112,7 @@ int writeReg(){
 		RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"Software\\RDMKeepbusy", 0, KEY_ALL_ACCESS, &hKey);
 	}
 	else{
-		return lRes;
+		goto exit_regwrite;
 	}
 	DWORD dwType = REG_DWORD;
 	DWORD dwSize = sizeof(DWORD);
@@ -108,65 +120,81 @@ int writeReg(){
 
 	dwData = bUseLogging; dwSize = sizeof(DWORD);
 	if( lRes = RegSetValueEx (hKey, L"doLogging", 0, dwType, (BYTE*) &dwData, dwSize) != ERROR_SUCCESS)
-		return lRes;
+		goto exit_regwrite;
 
 	dwData = drawPointX;
 	if( lRes = RegSetValueEx (hKey, L"lineX", 0, dwType, (BYTE*) &dwData, dwSize) != ERROR_SUCCESS)
-		return lRes;
+		goto exit_regwrite;
 	
 	dwData = drawPointY; dwSize = sizeof(DWORD);
 	if( lRes = RegSetValueEx (hKey, L"lineY", 0, dwType, (BYTE*) &dwData, dwSize) != ERROR_SUCCESS)
-		return lRes;
+		goto exit_regwrite;
 
 	dwData = lineLength; dwSize = sizeof(DWORD);
 	if( lRes = RegSetValueEx (hKey, L"lineLen", 0, dwType, (BYTE*) &dwData, dwSize) != ERROR_SUCCESS)
-		return lRes;
+		goto exit_regwrite;
 
 	dwData = lineHeight; dwSize = sizeof(DWORD);
 	if( lRes = RegSetValueEx (hKey, L"lineWidth", 0, dwType, (BYTE*) &dwData, dwSize) != ERROR_SUCCESS)
-		return lRes;
+		goto exit_regwrite;
 
 	dwData = _dwKey1; dwSize = sizeof(DWORD);
 	if( lRes = RegSetValueEx (hKey, L"Key1", 0, dwType, (BYTE*) &dwData, dwSize) != ERROR_SUCCESS)
-		return lRes;
+		goto exit_regwrite;
 
 	dwData = _dwKey2; dwSize = sizeof(DWORD);
 	if( lRes = RegSetValueEx (hKey, L"Key2", 0, dwType, (BYTE*) &dwData, dwSize) != ERROR_SUCCESS)
-		return lRes;
+		goto exit_regwrite;
 
 	dwData = _dwLPARAM11; dwSize = sizeof(DWORD);
 	if( lRes = RegSetValueEx (hKey, L"lParam11", 0, dwType, (BYTE*) &dwData, dwSize) != ERROR_SUCCESS)
-		return lRes;
+		goto exit_regwrite;
 
 	dwData = _dwLPARAM12; dwSize = sizeof(DWORD);
 	if( lRes = RegSetValueEx (hKey, L"lParam12", 0, dwType, (BYTE*) &dwData, dwSize) != ERROR_SUCCESS)
-		return lRes;
+		goto exit_regwrite;
 
 	dwData = _dwLPARAM21; dwSize = sizeof(DWORD);
 	if( lRes = RegSetValueEx (hKey, L"lParam21", 0, dwType, (BYTE*) &dwData, dwSize) != ERROR_SUCCESS)
-		return lRes;
+		goto exit_regwrite;
 
 	dwData = _dwLPARAM22; dwSize = sizeof(DWORD);
 	if( lRes = RegSetValueEx (hKey, L"lParam22", 0, dwType, (BYTE*) &dwData, dwSize) != ERROR_SUCCESS)
-		return lRes;
+		goto exit_regwrite;
 
 	dwData = _dwUseMouse; dwSize = sizeof(DWORD);
 	if( lRes = RegSetValueEx (hKey, L"useMouse", 0, dwType, (BYTE*) &dwData, dwSize) != ERROR_SUCCESS)
-		return lRes;
+		goto exit_regwrite;
 	
 	dwData = _dwMouseX; dwSize = sizeof(DWORD);
 	if( lRes = RegSetValueEx (hKey, L"mouseX", 0, dwType, (BYTE*) &dwData, dwSize) != ERROR_SUCCESS)
-		return lRes;
+		goto exit_regwrite;
 
 	dwData = _dwMouseY; dwSize = sizeof(DWORD);
 	if( lRes = RegSetValueEx (hKey, L"mouseY", 0, dwType, (BYTE*) &dwData, dwSize) != ERROR_SUCCESS)
-		return lRes;
+		goto exit_regwrite;
 
 	dwData = _dwSLEEPTIME / 1000; dwSize = sizeof(DWORD);
 	if( lRes = RegSetValueEx (hKey, L"sleepTime", 0, dwType, (BYTE*) &dwData, dwSize) != ERROR_SUCCESS)
-		return lRes;
+		goto exit_regwrite;
 	
+	dwType=REG_SZ;
+	wsprintf(szMainRDMWindowsClass, L"TSSHELLWND");
+	dwSize=wcslen(szMainRDMWindowsClass)*sizeof(TCHAR);
+	if( lRes = RegSetValueEx (hKey, L"MainRDMWindowsClass", 0, dwType, (BYTE*) &szMainRDMWindowsClass, dwSize) != ERROR_SUCCESS)
+		goto exit_regwrite;
 
+	wsprintf(szUIcaptureChildWindowClass, L"Input Capture Window");
+	dwSize=wcslen(szUIcaptureChildWindowClass)*sizeof(TCHAR);
+	if( lRes = RegSetValueEx (hKey, L"UIcaptureChildWindowClass", 0, dwType, (BYTE*) &szUIcaptureChildWindowClass, dwSize) != ERROR_SUCCESS)
+		goto exit_regwrite;
+
+	wsprintf(szRDMconnectedSessionText, L"Remote Desktop Mobile");
+	dwSize=wcslen(szRDMconnectedSessionText)*sizeof(TCHAR);
+	if( lRes = RegSetValueEx (hKey, L"RDMconnectedSessionText", 0, dwType, (BYTE*) &szRDMconnectedSessionText, dwSize) != ERROR_SUCCESS)
+		goto exit_regwrite;
+
+exit_regwrite:
 	RegCloseKey(hKey);
 	return lRes;
 }
@@ -269,6 +297,37 @@ int readReg(){
 	else
 		bUseLogging=FALSE; 
 
+	dwSize = MAX_PATH;
+	TCHAR szTemp[MAX_PATH];
+	dwType=REG_SZ;
+	dwSize=dwSize*sizeof(TCHAR); //byte size is 
+	lRes = RegQueryValueEx(hKey, L"MainRDMWindowsClass", NULL, &dwType, (BYTE*) szTemp, &dwSize);
+	if(lRes==ERROR_SUCCESS)
+		wsprintf(szMainRDMWindowsClass, L"%s", szTemp);
+	else
+		wsprintf(szMainRDMWindowsClass, L"TSSHELLWND");
+
+	memset(szTemp,0,MAX_PATH*sizeof(TCHAR));
+	dwType=REG_SZ;
+	dwSize=dwSize*sizeof(TCHAR); //byte size is 
+	lRes = RegQueryValueEx(hKey, L"UIcaptureChildWindowClass", NULL, &dwType, (BYTE*) szTemp, &dwSize);
+	if(lRes==ERROR_SUCCESS)
+		wsprintf(szUIcaptureChildWindowClass, L"%s", szTemp);
+	else
+		wsprintf(szUIcaptureChildWindowClass, L"Input Capture Window");
+
+	memset(szTemp,0,MAX_PATH*sizeof(TCHAR));
+	dwType=REG_SZ;
+	dwSize=dwSize*sizeof(TCHAR); //byte size is 
+	lRes = RegQueryValueEx(hKey, L"RDMconnectedSessionText", NULL, &dwType, (BYTE*) szTemp, &dwSize);
+	if(lRes==ERROR_SUCCESS)
+		wsprintf(szRDMconnectedSessionText, L"%s", szTemp);
+	else
+		wsprintf(szRDMconnectedSessionText, L"Remote Desktop Mobile");
+
+	DEBUGMSG(1, (L"Windows text and class use: \nMainRDMWindowsClass: %s\nUIcaptureChildWindowClass; %s\nszRDMconnectedSessionText; %s\n", 
+		szMainRDMWindowsClass, szUIcaptureChildWindowClass, szRDMconnectedSessionText));
+
 	RegCloseKey(hKey);
 	return 0;
 }
@@ -354,11 +413,11 @@ HWND getMSTSChandle(){	//for use with PPC2003 Terminal Service Client
 	bFoundClass=FALSE;
 	hFoundHWND=NULL;
 	hFoundHWNDClass=NULL;
-	HWND hTSCWND = findWindow(hWndRDM, L"Input Capture Window");
+	HWND hTSCWND = findWindow(hWndRDM, szUIcaptureChildWindowClass);
 	if(hTSCWND)
-		DEBUGMSG(1, (L"getTSChandle(): Found Input Capture Window, Handle=0x%0x\n", hTSCWND));
+		DEBUGMSG(1, (L"getTSChandle(): Found '%s', Handle=0x%0x\n", szUIcaptureChildWindowClass, hTSCWND));
 	else
-		DEBUGMSG(1, (L"getTSChandle(): No Input Capture Windowfound\n"));
+		DEBUGMSG(1, (L"getTSChandle(): No '%s' found\n", szUIcaptureChildWindowClass));
 	return hTSCWND;
 }
 
@@ -379,18 +438,18 @@ HWND getTSChandle(){
 	//find the "Input Capture Window" child Window
 
 	//Find the top levvel window
-	HWND hWndRDM = FindWindow(_T("TSSHELLWND"), NULL);
+	HWND hWndRDM = FindWindow(szMainRDMWindowsClass, NULL);
 
 	//init find vars moved from being static inside findWindow() and findWindowByClass(), v15.01.2013
 	bFoundWindow=FALSE;
 	bFoundClass=FALSE;
 	hFoundHWND=NULL;
 	hFoundHWNDClass=NULL;
-	HWND hTSCWND = findWindow(hWndRDM, L"Input Capture Window");
+	HWND hTSCWND = findWindow(hWndRDM, szUIcaptureChildWindowClass);
 	if(hTSCWND)
-		DEBUGMSG(1, (L"getTSChandle(): Found Input Capture Window, Handle=0x%0x\n", hTSCWND));
+		DEBUGMSG(1, (L"getTSChandle(): Found '%s', Handle=0x%0x\n", szUIcaptureChildWindowClass, hTSCWND));
 	else
-		DEBUGMSG(1, (L"getTSChandle(): No Input Capture Windowfound\n"));
+		DEBUGMSG(1, (L"getTSChandle(): No I'%s' found\n", szUIcaptureChildWindowClass));
 	return hTSCWND;
 }
 
@@ -800,11 +859,11 @@ int WINAPI WinMain(	HINSTANCE hInstance,
     {
         //check if RDP Client is running, otherwise exit?
 		if(bUseLogging)
-			DEBUGMSG(1, (L"FindWindow 'TSSHELLWND'...\n"));
+			DEBUGMSG(1, (L"FindWindow '%s'...\n", szMainRDMWindowsClass));
         hWndRDM = getTSChandle();	//get correct window handle?, test with GetWindowRect()
 		if(hWndRDM!=NULL){
 			if(bUseLogging)
-				DEBUGMSG(1, (L"'TSSHELLWND' found.\n"));
+				DEBUGMSG(1, (L"'%s' found.\n", szMainRDMWindowsClass));
 			//window found
 			EnterCriticalSection(&myCriticalSection);
 
@@ -816,39 +875,34 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 			TCHAR* szSearch = L"Terminal Services Client";
 			HWND hwndTest = FindWindow(L"UIMainClass", NULL);
 #else
-			TCHAR* szSearch = L"Remote Desktop Mobile";
-			HWND hwndTest = FindWindow(L"TSSHELLWND", NULL);
+			TCHAR* szSearch = szRDMconnectedSessionText;
+			HWND hwndTest = FindWindow(szMainRDMWindowsClass, NULL);
 #endif
 			if(hwndTest!=NULL){
-				DEBUGMSG(1, (L"check for TSSHELLWND is active\n"));
+				DEBUGMSG(1, (L"check for %s is active\n", szMainRDMWindowsClass));
 				GetWindowText(hwndTest, szTitle, MAX_PATH);
 				pFound=wcsstr(szTitle, szSearch);
 				if(pFound!=NULL){
-					if(bUseLogging)
-						DEBUGMSG(1, (L"Found 'Remote Desktop Mobile/Terminal Services Client' in title\n"));
+					DEBUGMSG(1, (L"Found '%s' in title\n", szRDMconnectedSessionText));
 					pos=(int)(pFound-szTitle + 1);
 					if(pos==1) //the window text starts with "Remote Desktop Mobile"
 					{
-						if(bUseLogging)
-							DEBUGMSG(1, (L"'Remote Desktop Mobile/Terminal Services Client' is idle\n"));
+						DEBUGMSG(1, (L"'Remote Desktop Mobile/Terminal Services Client' is idle\n"));
 						g_dwStatus=idle;
 					}
 					else
 					{
-						if(bUseLogging)
-							DEBUGMSG(1, (L"'Remote Desktop Mobile/Terminal Services Client' is active\n"));
+						DEBUGMSG(1, (L"'Remote Desktop Mobile/Terminal Services Client' is active\n"));
 						g_dwStatus=active;
 					}
 				}
 				else{
-					if(bUseLogging)
-						DEBUGMSG(1, (L"'Remote Desktop Mobile/Terminal Services Client' is not active\n"));
+					DEBUGMSG(1, (L"'Remote Desktop Mobile/Terminal Services Client' is not active\n"));
 					g_dwStatus=inactive;
 				}
 			}
 			else{
-				if(bUseLogging)
-					DEBUGMSG(1, (L"'Remote Desktop Mobile/Terminal Services Client' is not found\n"));
+				DEBUGMSG(1, (L"'Remote Desktop Mobile/Terminal Services Client' is not found\n"));
 				g_dwStatus=notfound;
 			}
 
@@ -856,16 +910,14 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 
 			//did we reach the timeout
 			if(ii==0 && g_dwStatus==active){
-				if(bUseLogging)
-					DEBUGMSG(1, (L"Calling doMouseMove()\n"));
+				DEBUGMSG(1, (L"Calling doMouseMove()\n"));
 				doMouseMove(hWndRDM);
 			}
         }//hWndRDM
         else 
         {	
 			//window not found
-			if(bUseLogging)
-				DEBUGMSG(1, (L"FindWindow failed for 'TSSHELLWND'\n"));
+			DEBUGMSG(1, (L"FindWindow failed for '%s'\n", szMainRDMWindowsClass));
             //Sleep(5000);
 			EnterCriticalSection(&myCriticalSection);
 			g_dwStatus=notfound;
@@ -890,8 +942,7 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 
 
 Exit:
-	if(bUseLogging)
-		DEBUGMSG(1, (L"Exit!\n"));
+	DEBUGMSG(1, (L"Exit!\n"));
     // Release resources used by the critical section object.
 	EnterCriticalSection(&myCriticalSection);
 	g_dwStatus=stopped;

@@ -9,6 +9,10 @@ cmdLine:
 REGEDIT4
 
 [HKEY_LOCAL_MACHINE\Software\RDPKeepbusy]
+"RDMconnectedSessionText"="Remote Desktop Mobile"
+;you may need to use "Remotedesktop Mobile" for above entry
+"UIcaptureChildWindowClass"="Input Capture Window"
+"MainRDMWindowsClass"="TSSHELLWND"
 ;the following lines define the posisition and length of an indicator line, do not touch if you do not know what that means
 ;the indicator line will blink green or red as long as RDM_KeepBusy is running
 ;red=no RDM running
