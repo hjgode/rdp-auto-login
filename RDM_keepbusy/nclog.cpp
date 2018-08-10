@@ -2,7 +2,6 @@
 #pragma once
 
 //#define USEWINSOCK
-#define USEFILELOG
 
 #include <windows.h>
 #ifdef USEWINSOCK
@@ -29,12 +28,8 @@ static unsigned short theLogPort;
 static char		logFileName[MAX_PATH];
 static TCHAR	logFileNameW[MAX_PATH];
 static BOOL		bFirstFileCall = true;
-
-#if DEBUG
-	BOOL ncLogEnabled = FALSE;
-#else
-	BOOL ncLogEnabled = FALSE;
-#endif
+BOOL		nclog_LogginEnabled = TRUE;
+static int checkFileSizeCount=0;			//do check file size on every write
 
 #ifdef USEWINSOCK
 // bind the log socket to a specific port.
@@ -99,6 +94,44 @@ static void wsa_send(const char *x)
 }
 #endif
 
+void checkFileSize(TCHAR *szName){
+	//only check every 10th call
+	if(checkFileSizeCount<10)
+		return;
+	else
+		checkFileSizeCount=0;
+
+	checkFileSizeCount++;
+
+	HANDLE hFile = CreateFile(szName, 
+       GENERIC_READ,          // open for writing
+       FILE_SHARE_READ,       // share
+       NULL,                   // default security
+       OPEN_EXISTING,          // open existing
+       FILE_ATTRIBUTE_NORMAL,  // normal file
+       NULL);                  // no attr. template
+	DWORD dwFileSize = GetFileSize(hFile, NULL);
+	CloseHandle(hFile);
+
+	if(dwFileSize != 0xFFFFFFFF){ //no error
+		if(dwFileSize>0x100000){ //more than 1MB?
+			//make a backup
+			//delete previous bak
+			TCHAR txtFileNameBAK[MAX_PATH];
+			wsprintf(txtFileNameBAK, L"%s.bak", szName);
+			DeleteFile(txtFileNameBAK);
+			//rename old file to .BAK
+			MoveFile(szName, txtFileNameBAK);
+		}
+	}
+}
+void checkFileSize(char *szName){
+	TCHAR szNameW[MAX_PATH];
+	memset(szNameW,0, MAX_PATH*sizeof(TCHAR));
+	mbstowcs(szNameW, szName, strlen(szName));
+	checkFileSize(szNameW);
+}
+
 //========================== start of file stuff =============================
 static int initFileNames()
 {
@@ -109,14 +142,13 @@ static int initFileNames()
 	//add txt extension
 	TCHAR txtFileName[MAX_PATH+1];
 	wsprintf(txtFileName, L"%s.log.txt", lpFileName1);
-
-#ifdef USEFILELOG
-
 	//store the filename to use in char and tchar
 	TCHAR logFileNameW[MAX_PATH];
 
 	//#### we maintain two log files, an actual and a bak one
 	//get file size
+	checkFileSize(txtFileName);
+	/*
 	HANDLE hFile = CreateFile(txtFileName, 
        GENERIC_READ,          // open for writing
        FILE_SHARE_READ,       // share
@@ -138,6 +170,7 @@ static int initFileNames()
 			MoveFile(txtFileName, txtFileNameBAK);
 		}
 	}
+	*/
 
 	//copy filename to global char and tchar var
 	wsprintf(logFileNameW, txtFileName);
@@ -146,9 +179,6 @@ static int initFileNames()
 	FILE	*fp;
 	fp = fopen(logFileName, "a+");
 	fclose(fp);
-
-#endif //USEFILELOG
-	
 	bFirstFileCall=false;
 	return 0;
 }
@@ -188,7 +218,8 @@ TCHAR* logDateTime(){
 }
 
 static int writefile(TCHAR *filetext){
-#ifdef USEFILELOG
+	if(!nclog_LogginEnabled)
+		return 0;
 
 //	EnterCriticalSection(pCriticalAction);
 
@@ -203,6 +234,9 @@ static int writefile(TCHAR *filetext){
 	if (bFirstFileCall){
 		// Get name of executable
 		initFileNames();
+	}
+	else{
+		checkFileSize(logFileNameW);
 	}
 
 	fp = fopen(logFileName, "a+");
@@ -226,8 +260,6 @@ static int writefile(TCHAR *filetext){
 
 //	LeaveCriticalSection(pCriticalAction);
 
-#endif  //USEFILELOG
-
 	return 0;
 }
 //========================== end of file stuff =============================
@@ -235,33 +267,32 @@ static int writefile(TCHAR *filetext){
 // format input, convert to 8-bit and send.
 void nclog (const wchar_t *fmt, ...)
 {
-	if(!ncLogEnabled)
-		return;
+        va_list vl;
+        va_start(vl,fmt);
+        wchar_t bufW[10240]; // to bad CE hasn't got wvnsprintf
+        wvsprintf(bufW,fmt,vl);
+#ifdef USEWINSOCK
+		wsa_init();
+#endif
+        char bufOutA[5120];
+		//add instance number
+		HMODULE hMod = GetModuleHandle(NULL);
+		WCHAR bufTmpW[5120];
+		wsprintf(bufTmpW, L"0x%08x: %s", hMod, bufW);
+		wsprintf(bufW, L"%s", bufTmpW);
+		//convert to char
+        WideCharToMultiByte(CP_ACP,0,bufW,-1,bufOutA,5000, NULL, NULL);
+#ifdef USEWINSOCK
+		wsa_send(bufOutA);
+#endif
 
-    va_list vl;
-    va_start(vl,fmt);
-    wchar_t bufW[1024]; // to bad CE hasn't got wvnsprintf
-    wvsprintf(bufW,fmt,vl);
-#ifdef USEWINSOCK
-	wsa_init();
-#endif
-    char bufOutA[512];
-	//add instance number
-	HMODULE hMod = GetModuleHandle(NULL);
-	WCHAR bufTmpW[512];
-	wsprintf(bufTmpW, L"0x%08x: %s", hMod, bufW);
-	wsprintf(bufW, L"%s", bufTmpW);
-	//convert to char
-    WideCharToMultiByte(CP_ACP,0,bufW,-1,bufOutA,400, NULL, NULL);
-#ifdef USEWINSOCK
-	wsa_send(bufOutA);
-#endif
-		writefile(bufW);
-#ifdef DEBUG
-	DEBUGMSG(1, (bufW));
-#else
-	RETAILMSG(1, (bufW));
-#endif
+			writefile(bufW);
+
+//#ifdef DEBUG
+//		DEBUGMSG(1, (bufW));
+//#else
+//		RETAILMSG(1, (bufW));
+//#endif
 }
 
 // finalize the socket on program termination.

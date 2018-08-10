@@ -2,6 +2,7 @@
 //
 
 #include "stdafx.h"
+#include "nclog.h"
 
 #pragma comment(user, "version 20180809")
 
@@ -17,6 +18,25 @@ BOOL bUseLogging=TRUE;
 	//4 minutes 
 	DWORD _dwSLEEPTIME = 1000*60*4;
 #endif
+
+#define MYDEBUGMSG1(x, ...) DEBUGMSG(1,(__VA_ARGS__)) 
+
+	void MYDEBUGMSG(const wchar_t *fmt, ...){
+        va_list vl;
+		va_start(vl,fmt);
+		wchar_t bufW[10240]; // to bad CE hasn't got wvnsprintf
+		wvsprintf(bufW,fmt,vl);
+#ifdef DEBUG
+		MYDEBUGMSG1(1, (bufW));
+#endif
+		if(bUseLogging){
+			nclog(bufW);
+		}
+	}
+
+//	DEBUGMSG(cond,printf_exp); \
+//	NKDbgPrintfW(printf_exp); \	
+
 
 #define sMUTEX L"RDMKEEPBUSY"		//allow only one instance
 #define sEvent L"STOPRDMKEEPBUSY"	//let RDMKeepbusy shutdown
@@ -297,6 +317,9 @@ int readReg(){
 	else
 		bUseLogging=FALSE; 
 
+	nclog_LogginEnabled=bUseLogging;
+	MYDEBUGMSG(bUseLogging?L"Logging enabled":L"Logging disabled");
+
 	dwSize = MAX_PATH;
 	TCHAR szTemp[MAX_PATH];
 	dwType=REG_SZ;
@@ -325,8 +348,8 @@ int readReg(){
 	else
 		wsprintf(szRDMconnectedSessionText, L"Remote Desktop Mobile");
 
-	DEBUGMSG(1, (L"Windows text and class use: \nMainRDMWindowsClass: %s\nUIcaptureChildWindowClass; %s\nszRDMconnectedSessionText; %s\n", 
-		szMainRDMWindowsClass, szUIcaptureChildWindowClass, szRDMconnectedSessionText));
+	MYDEBUGMSG(L"Windows text and class use: \nMainRDMWindowsClass: %s\nUIcaptureChildWindowClass; %s\nszRDMconnectedSessionText; %s\n", 
+		szMainRDMWindowsClass, szUIcaptureChildWindowClass, szRDMconnectedSessionText);
 
 	RegCloseKey(hKey);
 	return 0;
@@ -347,7 +370,7 @@ HWND findWindow(HWND hWndStart, TCHAR* szTitle){
 		GetClassName(hWnd, cszClassString, MAX_PATH);
 		GetWindowText(hWnd, cszWindowString, MAX_PATH);
 		if(bUseLogging)
-			DEBUGMSG(1, (L"findWindow: \"%s\"  \"%s\"\n", cszClassString, cszWindowString));
+			MYDEBUGMSG(L"findWindow: \"%s\"  \"%s\"\n", cszClassString, cszWindowString);
 
 		if(wcscmp(cszWindowString, szTitle)==0){
 			bFoundWindow=TRUE;
@@ -379,7 +402,7 @@ HWND findWindowByClass(HWND hWndStart, TCHAR* szClass){
 		GetClassName(hWnd, cszClassString, MAX_PATH);
 		GetWindowText(hWnd, cszWindowString, MAX_PATH);
 		if(bUseLogging)
-			DEBUGMSG(1, (L"findWindow: \"%s\"  \"%s\"\n", cszClassString, cszWindowString));
+			MYDEBUGMSG(L"findWindow: \"%s\"  \"%s\"\n", cszClassString, cszWindowString);
 
 		if(wcscmp(cszWindowString, szClass)==0){
 			bFoundClass=TRUE;
@@ -415,9 +438,9 @@ HWND getMSTSChandle(){	//for use with PPC2003 Terminal Service Client
 	hFoundHWNDClass=NULL;
 	HWND hTSCWND = findWindow(hWndRDM, szUIcaptureChildWindowClass);
 	if(hTSCWND)
-		DEBUGMSG(1, (L"getTSChandle(): Found '%s', Handle=0x%0x\n", szUIcaptureChildWindowClass, hTSCWND));
+		MYDEBUGMSG( L"getTSChandle(): Found '%s', Handle=0x%0x\n", szUIcaptureChildWindowClass, hTSCWND);
 	else
-		DEBUGMSG(1, (L"getTSChandle(): No '%s' found\n", szUIcaptureChildWindowClass));
+		MYDEBUGMSG(L"getTSChandle(): No '%s' found\n", szUIcaptureChildWindowClass);
 	return hTSCWND;
 }
 
@@ -447,9 +470,9 @@ HWND getTSChandle(){
 	hFoundHWNDClass=NULL;
 	HWND hTSCWND = findWindow(hWndRDM, szUIcaptureChildWindowClass);
 	if(hTSCWND)
-		DEBUGMSG(1, (L"getTSChandle(): Found '%s', Handle=0x%0x\n", szUIcaptureChildWindowClass, hTSCWND));
+		MYDEBUGMSG(L"getTSChandle(): Found '%s', Handle=0x%0x\n", szUIcaptureChildWindowClass, hTSCWND);
 	else
-		DEBUGMSG(1, (L"getTSChandle(): No I'%s' found\n", szUIcaptureChildWindowClass));
+		MYDEBUGMSG(L"getTSChandle(): No I'%s' found\n", szUIcaptureChildWindowClass);
 	return hTSCWND;
 }
 
@@ -461,11 +484,11 @@ DWORD myWatchThread(LPVOID lpParam){
 	if(hEventWatch!=NULL){
 		if(GetLastError()==ERROR_ALREADY_EXISTS){
 			if(bUseLogging)
-				DEBUGMSG(1, (L"CreateEvent: Event '%s' already exists\n", sEvent));
+				MYDEBUGMSG(L"CreateEvent: Event '%s' already exists\n", sEvent);
 		}
 		else
 			if(bUseLogging)
-				DEBUGMSG(1, (L"CreateEvent: Event '%s' did not yet exist\n", sEvent));
+				MYDEBUGMSG(L"CreateEvent: Event '%s' did not yet exist\n", sEvent);
 		//now start to wait for the event to be signaled
 		do{
 		DWORD dwRes = WaitForSingleObject(hEventWatch, INFINITE);
@@ -487,7 +510,7 @@ DWORD myWatchThread(LPVOID lpParam){
 	}
 	else{
 		if(bUseLogging)
-			DEBUGMSG(1, (L"CreateEvent failed: GetLastError=%u\n", GetLastError()));
+			MYDEBUGMSG(L"CreateEvent failed: GetLastError=%u\n", GetLastError());
 		dwRet=-1;
 	}
 	return dwRet;
@@ -616,9 +639,9 @@ COLORREF getColor(){
 		int _green = GetGValue(_color);
 		int _blue = GetBValue(_color);
 
-		DEBUGMSG(1,(L"Red: 0x%02x\n", _red));
-		DEBUGMSG(1,(L"Green: 0x%02x\n", _green));
-		DEBUGMSG(1,(L"Blue: 0x%02x\n", _blue));
+		MYDEBUGMSG(L"Red: 0x%02x\n", _red);
+		MYDEBUGMSG(L"Green: 0x%02x\n", _green);
+		MYDEBUGMSG(L"Blue: 0x%02x\n", _blue);
 	}
 	return _color;
 }
@@ -631,18 +654,18 @@ void doMouseMove(HWND hWndRDM){
 	RECT rect;
 	if(GetWindowRect(hWndRDM, &rect)){
 		if(bUseLogging)
-			DEBUGMSG(1, (L"GetWindowRect: %i,%i : %i,%i\n", rect.left, rect.top, rect.right, rect.bottom));
+			MYDEBUGMSG(L"GetWindowRect: %i,%i : %i,%i\n", rect.left, rect.top, rect.right, rect.bottom);
 		if(rect.top<0 || rect.bottom<0 || rect.left<0 || rect.right<0)
 		{
 			if(bUseLogging){
-				DEBUGMSG(1, (L"RDM active window outside screen (inactive?)\n"));
-				DEBUGMSG(1, (L"RDM hwnd=0x%x, foreground hwnd=0x%x\n", hWndRDM, GetForegroundWindow()));
+				MYDEBUGMSG(L"RDM active window outside screen (inactive?)\n");
+				MYDEBUGMSG(L"RDM hwnd=0x%x, foreground hwnd=0x%x\n", hWndRDM, GetForegroundWindow());
 			}
 		}
 	}
 	else{
 		if(bUseLogging)
-			DEBUGMSG(1, (L"GetWindowRect()failed. GetLastError()=%i\n", GetLastError()));	//get 1400=invalid window handle on subsequent calls!?
+			MYDEBUGMSG(L"GetWindowRect()failed. GetLastError()=%i\n", GetLastError());	//get 1400=invalid window handle on subsequent calls!?
 	}
     ////Get foreground window -- this is not needed if RDM is launched Full-Screen as it was in this case
     //hWndForeground = GetForegroundWindow();
@@ -650,7 +673,7 @@ void doMouseMove(HWND hWndRDM){
 
     //Give focus to the RDP Client window (even if the logon screen, in case user logged out in the meantime)
 	if(bUseLogging)
-		DEBUGMSG(1, (L"SetForGroundWindow\n"));
+		MYDEBUGMSG(L"SetForGroundWindow\n");
     SetForegroundWindow(hWndRDM);
 
     //The timer is reset when the rdp window receives mouse or keyboard input
@@ -669,24 +692,24 @@ void doMouseMove(HWND hWndRDM){
 	// LRESULT SendMessage(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 	lRes = SendMessage (hWndRDM, WM_MOUSEMOVE, NULL, MAKELPARAM(0x100,0));
 		if(bUseLogging)
-			DEBUGMSG(1, (L"WM_MOUSEMOVE 1, lRes=%u\n", lRes));
+			MYDEBUGMSG(L"WM_MOUSEMOVE 1, lRes=%u\n", lRes);
 	Sleep(20);
 	lRes = SendMessage (hWndRDM, WM_MOUSEMOVE, NULL, MAKELPARAM(-0x100,0));
 		if(bUseLogging)
-			DEBUGMSG(1, (L"WM_MOUSEMOVE 2, lRes=%u\n", lRes));
+			MYDEBUGMSG(L"WM_MOUSEMOVE 2, lRes=%u\n", lRes);
 
 	if(_dwUseMouse==1){
 		lRes = SendMessage(hWndRDM, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(_dwMouseX, _dwMouseY));
 		if(bUseLogging)
-			DEBUGMSG(1, (L"MOUSEDOWN/UP 1, lRes=%u\n", lRes));
+			MYDEBUGMSG(L"MOUSEDOWN/UP 1, lRes=%u\n", lRes);
 		Sleep(20);
 		lRes = SendMessage(hWndRDM, WM_LBUTTONUP, MK_LBUTTON, MAKELPARAM(_dwMouseX, _dwMouseY));
 		if(bUseLogging)
-			DEBUGMSG(1, (L"MOUSEUP 2 DONE, lRes=%u\n", lRes));
+			MYDEBUGMSG(L"MOUSEUP 2 DONE, lRes=%u\n", lRes);
 	}
 	else
 		if(bUseLogging)
-			DEBUGMSG(1, (L"MouseClick will not be used\n"));
+			MYDEBUGMSG(L"MouseClick will not be used\n");
 
 	if(_dwUseKeyboard==1){
 		//right
@@ -694,25 +717,25 @@ void doMouseMove(HWND hWndRDM){
 		//msg: 0x101, wParam: 0x27, lParam: 0xc14d0001
 		lRes = SendMessage(hWndRDM, WM_KEYDOWN, _dwKey1, _dwLPARAM11);
 		if(bUseLogging)
-			DEBUGMSG(1, (L"WM_KEYDOWN 1, lRes=%u\n", lRes));
+			MYDEBUGMSG(L"WM_KEYDOWN 1, lRes=%u\n", lRes);
 		Sleep(20);
 		lRes = SendMessage(hWndRDM, WM_KEYUP, _dwKey1, _dwLPARAM12);
 		if(bUseLogging)
-			DEBUGMSG(1, (L"WM_KEYUP 1, lRes=%u\n", lRes));
+			MYDEBUGMSG(L"WM_KEYUP 1, lRes=%u\n", lRes);
 		//left
 		//msg: 0x100, wParam: 0x25, lParam: 0x14b0001
 		//msg: 0x101, wParam: 0x25, lParam: 0xc14b0001
 		lRes = SendMessage(hWndRDM, WM_KEYDOWN, _dwKey2, _dwLPARAM21);
 		if(bUseLogging)
-			DEBUGMSG(1, (L"WM_KEYDOWN 2, lRes=%u\n", lRes));
+			MYDEBUGMSG(L"WM_KEYDOWN 2, lRes=%u\n", lRes);
 		Sleep(20);
 		lRes = SendMessage(hWndRDM, WM_KEYUP, _dwKey2, _dwLPARAM22);
 		if(bUseLogging)
-			DEBUGMSG(1, (L"WM_KEYUP 2, lRes=%u\n", lRes));
+			MYDEBUGMSG(L"WM_KEYUP 2, lRes=%u\n", lRes);
 	}
 	else
 		if(bUseLogging)
-			DEBUGMSG(1, (L"Keyboard will not be used\n"));
+			MYDEBUGMSG(L"Keyboard will not be used\n");
 
 #ifdef USE_KEYBD
 	////using keyboard event, does not work for WinMo 6.5.3
@@ -765,22 +788,22 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 
 	//allow only one instance
 	if(bUseLogging)
-		DEBUGMSG(1, (L"CreateMutex..."));
+		MYDEBUGMSG(L"CreateMutex...");
 	HANDLE hMutex = CreateMutex(NULL, bOwnerShip, sMUTEX);
 	DWORD dwErr = GetLastError();
 	if(bUseLogging)
-		DEBUGMSG(1, (L"hMutex=0x0%0x, LastError=0x%0x\n", hMutex, dwErr));
+		MYDEBUGMSG(L"hMutex=0x0%0x, LastError=0x%0x\n", hMutex, dwErr);
 
 	if(hMutex!=NULL){
 		if(dwErr==ERROR_ALREADY_EXISTS){
 			//allow only one instance
 			if(bUseLogging)
-				DEBUGMSG(1, (L"Mutex already exists, Exit!\n"));
+				MYDEBUGMSG(L"Mutex already exists, Exit!\n");
 			ReleaseMutex(hMutex);
 			return -3;
 		}
 	}
-	DEBUGMSG(1, (L"no Mutex. Continueing..!\n"));
+	MYDEBUGMSG(L"no Mutex. Continueing..!\n");
 
     HWND hWndRDM = NULL;
 	HWND hWinShell = NULL;
@@ -788,7 +811,7 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 
 	//check command line args
 	if(bUseLogging)
-		DEBUGMSG(1, (L"lpCmdLine= '%s'\n", lpCmdLine));
+		MYDEBUGMSG(L"lpCmdLine= '%s'\n", lpCmdLine);
 
 	//enable logging to file?
 	if( wcslen(lpCmdLine)>0 && wcsstr(lpCmdLine, L"dologging")!=0)
@@ -803,14 +826,14 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 	if( wcslen(lpCmdLine)>0 && _wcsicmp(L"noRDPstart", lpCmdLine)==0)
 	{
 		if(bUseLogging)
-			DEBUGMSG(1, (L"RDP client will not be started, lpCmdLine 'noRDPstart' found\n"));
+			MYDEBUGMSG(L"RDP client will not be started, lpCmdLine 'noRDPstart' found\n");
 	}
 	else{
 		//First check if TSC is already running???
 		HWND hwndTemp = getTSChandle();
 		if(hwndTemp!=NULL){	//found a running TSC window
 			if(bUseLogging)
-				DEBUGMSG(1, (L"TSC is already running\n"));
+				MYDEBUGMSG(L"TSC is already running\n");
 		}
 		else{ //start a new TSC client
 			//Firstly launch RDP Client
@@ -830,7 +853,7 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 			}
 			else{
 				if(bUseLogging)
-					DEBUGMSG(1, (L"RDP client started, sleeping 500ms...\n"));
+					MYDEBUGMSG(L"RDP client started, sleeping 500ms...\n");
 				Sleep(500);
 			}
 		}
@@ -843,11 +866,11 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 
 	//thread to animate line bar at bottom
 	hThread = CreateThread(NULL, 0, myThread, NULL, 0, &idThread);
-	DEBUGMSG(1, (L"Animation CreateThread handle=%u\n", hThread));
+	MYDEBUGMSG(L"Animation CreateThread handle=%u\n", hThread);
 
 	//create the watch thread to be able to exit the app
 	HANDLE hThreadWatch = CreateThread(NULL, 0, myWatchThread, NULL, 0, &idThreadWatch);
-	DEBUGMSG(1, (L"WatchDog thread handle=%u\n", hThreadWatch));
+	MYDEBUGMSG(L"WatchDog thread handle=%u\n", hThreadWatch);
 
 	// Initialize the critical section one time only.
     InitializeCriticalSection(&myCriticalSection);
@@ -859,11 +882,11 @@ int WINAPI WinMain(	HINSTANCE hInstance,
     {
         //check if RDP Client is running, otherwise exit?
 		if(bUseLogging)
-			DEBUGMSG(1, (L"FindWindow '%s'...\n", szMainRDMWindowsClass));
+			MYDEBUGMSG(L"FindWindow '%s'...\n", szMainRDMWindowsClass);
         hWndRDM = getTSChandle();	//get correct window handle?, test with GetWindowRect()
 		if(hWndRDM!=NULL){
 			if(bUseLogging)
-				DEBUGMSG(1, (L"'%s' found.\n", szMainRDMWindowsClass));
+				MYDEBUGMSG(L"'%s' found.\n", szMainRDMWindowsClass);
 			//window found
 			EnterCriticalSection(&myCriticalSection);
 
@@ -879,30 +902,30 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 			HWND hwndTest = FindWindow(szMainRDMWindowsClass, NULL);
 #endif
 			if(hwndTest!=NULL){
-				DEBUGMSG(1, (L"check for %s is active\n", szMainRDMWindowsClass));
+				MYDEBUGMSG(L"check for %s is active\n", szMainRDMWindowsClass);
 				GetWindowText(hwndTest, szTitle, MAX_PATH);
 				pFound=wcsstr(szTitle, szSearch);
 				if(pFound!=NULL){
-					DEBUGMSG(1, (L"Found '%s' in title\n", szRDMconnectedSessionText));
+					MYDEBUGMSG(L"Found '%s' in title\n", szRDMconnectedSessionText);
 					pos=(int)(pFound-szTitle + 1);
 					if(pos==1) //the window text starts with "Remote Desktop Mobile"
 					{
-						DEBUGMSG(1, (L"'Remote Desktop Mobile/Terminal Services Client' is idle\n"));
+						MYDEBUGMSG(L"'Remote Desktop Mobile/Terminal Services Client' is idle\n");
 						g_dwStatus=idle;
 					}
 					else
 					{
-						DEBUGMSG(1, (L"'Remote Desktop Mobile/Terminal Services Client' is active\n"));
+						MYDEBUGMSG(L"'Remote Desktop Mobile/Terminal Services Client' is active\n");
 						g_dwStatus=active;
 					}
 				}
 				else{
-					DEBUGMSG(1, (L"'Remote Desktop Mobile/Terminal Services Client' is not active\n"));
+					MYDEBUGMSG(L"'Remote Desktop Mobile/Terminal Services Client' is not active\n");
 					g_dwStatus=inactive;
 				}
 			}
 			else{
-				DEBUGMSG(1, (L"'Remote Desktop Mobile/Terminal Services Client' is not found\n"));
+				MYDEBUGMSG(L"'Remote Desktop Mobile/Terminal Services Client' is not found\n");
 				g_dwStatus=notfound;
 			}
 
@@ -910,14 +933,14 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 
 			//did we reach the timeout
 			if(ii==0 && g_dwStatus==active){
-				DEBUGMSG(1, (L"Calling doMouseMove()\n"));
+				MYDEBUGMSG(L"Calling doMouseMove()\n");
 				doMouseMove(hWndRDM);
 			}
         }//hWndRDM
         else 
         {	
 			//window not found
-			DEBUGMSG(1, (L"FindWindow failed for '%s'\n", szMainRDMWindowsClass));
+			MYDEBUGMSG(L"FindWindow failed for '%s'\n", szMainRDMWindowsClass);
             //Sleep(5000);
 			EnterCriticalSection(&myCriticalSection);
 			g_dwStatus=notfound;
@@ -930,19 +953,19 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 		ii++;
 		if(ii > _dwSLEEPTIME/1000){
 			if(bUseLogging)
-				DEBUGMSG(1, (L"Counter reset\n"));
+				MYDEBUGMSG(L"Counter reset\n");
 			ii=0; //reset counter
 		}
         //Sleep 
 		if(bUseLogging)
-			DEBUGMSG(1, (L"Sleep ...\n"));
+			MYDEBUGMSG(L"Sleep ...\n");
 		Sleep(1000);
     }
     while (_bRunApp); //The check (NULL != hWndRDM) is already done inside the loop
 
 
 Exit:
-	DEBUGMSG(1, (L"Exit!\n"));
+	MYDEBUGMSG(L"Exit!\n");
     // Release resources used by the critical section object.
 	EnterCriticalSection(&myCriticalSection);
 	g_dwStatus=stopped;
