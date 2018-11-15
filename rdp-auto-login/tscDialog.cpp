@@ -1,3 +1,7 @@
+//for screen downscaling test
+#define DEBUG1
+#undef DEBUG1
+
 //tscDialog.cpp
 #include "stdafx.h"
 
@@ -8,20 +12,24 @@
 REGEDIT4
 
 [HKEY_LOCAL_MACHINE\Software\RDP_autologin]
-"FitToScreen"="1"
-"FullScreen"="1"
-"Status"="connecting..."
-"Save Password"="1"
-"Domain"=""
-"Password"="Intermec+2004"
 "Username"="rdesktop"
-"Computer"="192.168.0.130"
-"DesktopWidth"=640
-"DesktopHeight"=480
-"startOnExit"="\\rdp_keepBusy.exe"
-"execargs"="noRDPstart"
+"Password"="rdesktop"
+"Domain"="corpnet"
+"AudioRedirectionMode"=dword:00000002
+"ExecArgs"="nordpstart"
+"DesktopWidth"="240"
+"DesktopHeight"="320"
+"Computer"="199.64.70.66"
+"FullScreen"="0"
+"EnableDriveRedirection"=dword:00000000
+"StartOnExit"="\\Windows\\rdm_keepbusy.exe"
 "UseMouseClick"="0"	//added with version 3 to switch between mouse and keyboard simulation
-"ColorDepth"=1		//added with version 4 to enable switching between 8 and 16 Bit colors
+"Status"="connecting..."
+"Save Password"=dword:00000000
+"DeviceStorage"=dword:00000001
+"ColorDepth"=dword:00000001		//added with version 4 to enable switching between 8 and 16 Bit colors
+"SavePassword"="1"
+"FitToScreen"="0"
 */
 
 //#include "C:/Programme/Windows Mobile 6 SDK/PocketPC/Include/Armv4i/uniqueid.h"
@@ -188,20 +196,27 @@ void writeRDP(){
 					wsprintf(szTemp, rdpLines[c].line, L"0");
 
 			else if(wcsstr(rdpLines[c].line, L"DesktopHeight")!=NULL)
-
+#if DEBUG1
+				wsprintf(szTemp, rdpLines[c].line, L"640");// /* L"320" */);		
+#else
 				if(g_bUseFitToScreen)   //3=FullScreen or 1=normal
 					wsprintf(szTemp, rdpLines[c].line, sScreenHeight /* L"320" */);
 				else
 					wsprintf(szTemp, rdpLines[c].line, sDesktopHeight);// L"640");
-
+#endif
 			else if(wcsstr(rdpLines[c].line, L"DesktopWidth")!=NULL)
-
+#if DEBUG1
+				wsprintf(szTemp, rdpLines[c].line, L"480");// /* L"320" */);		
+#else
 				if(g_bUseFitToScreen)   //3=FullScreen or 1=normal
 					wsprintf(szTemp, rdpLines[c].line, sScreenWidth /* L"240" */);
 				else
 					wsprintf(szTemp, rdpLines[c].line, sDesktopWidth);// L"480");
-
+#endif
 			else if(wcsstr(rdpLines[c].line, L"ScreenStyle")!=NULL){
+#if DEBUG1
+				wsprintf(szTemp, rdpLines[c].line, L"3");
+#else
 				//0=no fullscreen + no fit, 1= fit to screen+no fullscreen, 2=fullscreen+no fit, 3=fit+fullscreen
 				if(g_bUseFullscreen && g_bUseFitToScreen)   
 					wsprintf(szTemp, rdpLines[c].line, L"3");
@@ -213,6 +228,7 @@ void writeRDP(){
 					wsprintf(szTemp, rdpLines[c].line, L"2");
 				else
 					wsprintf(szTemp, rdpLines[c].line, L"0");
+#endif
 			}
 
 			else if(wcsstr(rdpLines[c].line, L"ColorDepthID")!=NULL){
@@ -338,7 +354,7 @@ void writeReg(){
 		else
 			DEBUGMSG(1, (L"WriteReg FAILED: FitToScreen=0\n"));
 		
-		g_bUseFitToScreen=false;
+		g_bUseFitToScreen=true;
 		if(RegWriteDword(L"DesktopWidth", &iDesktopWidth)==0)
 			DEBUGMSG(1, (L"WriteReg OK: DesktopWidth=%u\n", iDesktopWidth));
 		else

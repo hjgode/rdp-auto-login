@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "nclog.h"
 
-#pragma comment(user, "version 20180809")
+#pragma comment(user, "version 20181115")
 
 BOOL bUseLogging=TRUE;
 

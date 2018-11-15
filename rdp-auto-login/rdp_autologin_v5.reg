@@ -6,12 +6,12 @@ REGEDIT4
 "Domain"="corpnet"
 "AudioRedirectionMode"=dword:00000002
 "ExecArgs"="nordpstart"
-"DesktopWidth"="640"
-"DesktopHeight"="480"
-"Computer"="192.168.128.5"
+"DesktopWidth"="240"
+"DesktopHeight"="320"
+"Computer"="199.64.70.66"
 "FullScreen"="0"
 "EnableDriveRedirection"=dword:00000000
-"StartOnExit"="\\Windows\\rdp_keepbusy.exe"
+"StartOnExit"="\\Windows\\rdm_keepbusy.exe"
 "UseMouseClick"="0"
 "Status"="connecting..."
 "Save Password"="1"
